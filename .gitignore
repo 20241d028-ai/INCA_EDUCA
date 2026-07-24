@@ -1,0 +1,13 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (contienen contraseñas)
+.env
+.env.local
+
+# Build
+dist/
+.next/
+
+# Sistema
+.DS_Store

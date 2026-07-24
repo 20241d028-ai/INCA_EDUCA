@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// CARRERAS — catálogo de las 6 carreras técnicas de INCA EDUCA
+// ---------------------------------------------------------------------------
+model Carrera {
+  id              String       @id @default(uuid())
+  nombre          String
+  slug            String       @unique
+  duracionMeses   Int          @map("duracion_meses")
+  creadoEn        DateTime     @default(now()) @map("creado_en")
+
+  postulantes     Postulante[]
+
+  @@map("carreras")
+}
+
+// ---------------------------------------------------------------------------
+// POSTULANTES — todo el que llena el formulario, vía web o chatbot
+// ---------------------------------------------------------------------------
+enum OrigenPostulante {
+  formulario
+  chatbot
+}
+
+enum EstadoPostulante {
+  nuevo
+  contactado
+  en_seguimiento
+  matriculado
+  descartado
+}
+
+model Postulante {
+  id                    String            @id @default(uuid())
+  nombreApellido        String            @map("nombre_apellido")
+  dni                   String            @db.VarChar(8)
+  celular               String            @db.VarChar(9)
+  carreraId             String            @map("carrera_id")
+  carrera               Carrera           @relation(fields: [carreraId], references: [id])
+  estado                EstadoPostulante  @default(nuevo)
+  origen                OrigenPostulante
+  consentimientoDatos   Boolean           @default(false) @map("consentimiento_datos")
+  fechaRegistro         DateTime          @default(now()) @map("fecha_registro")
+
+  conversacion          Conversacion?
+  seguimientos          Seguimiento[]
+
+  @@map("postulantes")
+}
+
+// ---------------------------------------------------------------------------
+// CONVERSACIONES — solo se crea cuando el postulante pide hablar con un asesor
+// ---------------------------------------------------------------------------
+enum EstadoConversacion {
+  activa
+  escalada
+  cerrada
+}
+
+model Conversacion {
+  id                  String              @id @default(uuid())
+  postulanteId        String              @unique @map("postulante_id")
+  postulante          Postulante          @relation(fields: [postulanteId], references: [id])
+  estado              EstadoConversacion  @default(escalada)
+  fechaEscalamiento   DateTime            @default(now()) @map("fecha_escalamiento")
+
+  mensajes            Mensaje[]
+
+  @@map("conversaciones")
+}
+
+// ---------------------------------------------------------------------------
+// MENSAJES — historial de una conversación escalada (texto o audio)
+// ---------------------------------------------------------------------------
+enum RemitenteMensaje {
+  postulante
+  agente
+}
+
+enum TipoMensaje {
+  texto
+  audio
+}
+
+model Mensaje {
+  id               String            @id @default(uuid())
+  conversacionId   String            @map("conversacion_id")
+  conversacion     Conversacion      @relation(fields: [conversacionId], references: [id])
+  remitente        RemitenteMensaje
+  tipo             TipoMensaje       @default(texto)
+  contenido        String            @db.Text
+  enviadoEn        DateTime          @default(now()) @map("enviado_en")
+
+  @@map("mensajes")
+}
+
+// ---------------------------------------------------------------------------
+// SEGUIMIENTOS — registro de cada mensaje automático/manual de seguimiento
+// ---------------------------------------------------------------------------
+enum CanalSeguimiento {
+  whatsapp
+  correo
+}
+
+enum EstadoSeguimiento {
+  enviado
+  fallido
+  reintentando
+}
+
+model Seguimiento {
+  id             String             @id @default(uuid())
+  postulanteId   String             @map("postulante_id")
+  postulante     Postulante         @relation(fields: [postulanteId], references: [id])
+  adminId        String?            @map("admin_id")
+  admin          Admin?             @relation(fields: [adminId], references: [id])
+  canal          CanalSeguimiento
+  estado         EstadoSeguimiento  @default(enviado)
+  fechaEnvio     DateTime           @default(now()) @map("fecha_envio")
+
+  @@map("seguimientos")
+}
+
+// ---------------------------------------------------------------------------
+// GALERIA — fotos y videos de eventos institucionales
+// ---------------------------------------------------------------------------
+enum TipoGaleria {
+  foto
+  video
+}
+
+model Galeria {
+  id            String       @id @default(uuid())
+  tipo          TipoGaleria
+  url           String
+  titulo        String
+  evento        String
+  adminId       String       @map("admin_id")
+  admin         Admin        @relation(fields: [adminId], references: [id])
+  fechaSubida   DateTime     @default(now()) @map("fecha_subida")
+
+  @@map("galeria")
+}
+
+// ---------------------------------------------------------------------------
+// NOTIFICACIONES — bandeja de notificaciones del panel admin
+// ---------------------------------------------------------------------------
+enum TipoNotificacion {
+  nuevo_postulante
+  escalamiento
+}
+
+model Notificacion {
+  id             String            @id @default(uuid())
+  tipo           TipoNotificacion
+  referenciaId   String            @map("referencia_id")
+  mensaje        String
+  leido          Boolean           @default(false)
+  adminId        String?           @map("admin_id")
+  admin          Admin?            @relation(fields: [adminId], references: [id])
+  fechaCreacion  DateTime          @default(now()) @map("fecha_creacion")
+
+  @@map("notificaciones")
+}
+
+// ---------------------------------------------------------------------------
+// ADMINS — único rol administrativo (admin = asesor)
+// ---------------------------------------------------------------------------
+model Admin {
+  id             String          @id @default(uuid())
+  nombre         String
+  email          String          @unique
+  passwordHash   String          @map("password_hash")
+  creadoEn       DateTime        @default(now()) @map("creado_en")
+
+  seguimientos   Seguimiento[]
+  galeria        Galeria[]
+  notificaciones Notificacion[]
+
+  @@map("admins")
+}
