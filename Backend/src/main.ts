@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import carrerasRoutes from "./modules/carreras/routes";
 import postulantesRoutes from "./modules/postulantes/routes";
 import authRoutes from "./modules/auth/routes";
+import chatRoutes from "./modules/chat/routes";
+
 
 
 dotenv.config();
@@ -15,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/postulantes", postulantesRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (_req, res) => {
   res.json({ mensaje: "API de INCA EDUCA funcionando correctamente" });
