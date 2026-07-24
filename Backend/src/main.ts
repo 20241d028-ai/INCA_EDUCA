@@ -5,6 +5,7 @@ import carrerasRoutes from "./modules/carreras/routes";
 import postulantesRoutes from "./modules/postulantes/routes";
 import authRoutes from "./modules/auth/routes";
 import chatRoutes from "./modules/chat/routes";
+import webhooksRoutes from "./modules/webhooks/routes";
 
 
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api/postulantes", postulantesRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/webhooks", webhooksRoutes);
+
 
 app.get("/", (_req, res) => {
   res.json({ mensaje: "API de INCA EDUCA funcionando correctamente" });
