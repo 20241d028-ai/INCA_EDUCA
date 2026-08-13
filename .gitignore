@@ -11,3 +11,12 @@ dist/
 
 # Sistema
 .DS_Store
+
+# Infraestructura sensible - NUNCA subir
+oracle/
+n8n/
+Subidan8n/
+
+# Llaves SSH por si acaso quedan sueltas
+*.key
+*.pem
