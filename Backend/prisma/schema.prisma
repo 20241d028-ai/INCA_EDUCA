@@ -16,6 +16,8 @@ model Carrera {
   nombre          String
   slug            String       @unique
   duracionMeses   Int          @map("duracion_meses")
+  imagenUrl       String?      @map("imagen_url")
+  descripcionCorta String?     @map("descripcion_corta")
   creadoEn        DateTime     @default(now()) @map("creado_en")
 
   postulantes     Postulante[]
@@ -128,6 +130,17 @@ model Seguimiento {
   fechaEnvio     DateTime           @default(now()) @map("fecha_envio")
 
   @@map("seguimientos")
+}
+// ---------------------------------------------------------------------------
+// SESIONES WHATSAPP — historial temporal de conversaciones del bot de FAQ
+// ---------------------------------------------------------------------------
+model SesionWhatsapp {
+  id              String   @id @default(uuid())
+  telefono        String   @unique
+  historial       Json
+  ultimaActividad DateTime @default(now()) @map("ultima_actividad")
+
+  @@map("sesiones_whatsapp")
 }
 
 // ---------------------------------------------------------------------------

@@ -4,6 +4,7 @@ import {
   listarPostulantes,
   obtenerPostulantePorId,
   actualizarEstadoPostulante,
+  listarPendientesRecordatorio,
 } from "./service";
 import { EstadoPostulante, OrigenPostulante } from "@prisma/client";
 
@@ -35,6 +36,24 @@ export async function postCrearPostulante(req: Request, res: Response) {
       origen: origen === "chatbot" ? OrigenPostulante.chatbot : OrigenPostulante.formulario,
       consentimientoDatos,
     });
+
+    // Dispara la automatización de WhatsApp en n8n (no bloqueante:
+    // si n8n falla o está caído, no debe afectar la creación del postulante)
+    if (process.env.N8N_WEBHOOK_URL) {
+      fetch(process.env.N8N_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postulanteId: postulante.id,
+          nombre: postulante.nombreApellido,
+          telefono: `51${postulante.celular}`,
+          carrera: postulante.carrera.nombre,
+        }),
+      }).catch((err) => {
+        console.error("No se pudo notificar a n8n:", err);
+      });
+    }
+
     res.status(201).json(postulante);
   } catch (error) {
     res.status(400).json({ error: "No se pudo registrar el postulante. Verifica el carreraId." });
@@ -62,4 +81,14 @@ export async function patchEstadoPostulante(req: Request<{ id: string }>, res: R
   }
   const postulante = await actualizarEstadoPostulante(req.params.id, estado);
   res.json(postulante);
+}
+
+export async function getPendientesRecordatorio(req: Request, res: Response) {
+  const secretoRecibido = req.headers["x-webhook-secret"];
+  if (secretoRecibido !== process.env.N8N_WEBHOOK_SECRET) {
+    return res.status(401).json({ error: "Secreto de webhook inválido" });
+  }
+
+  const pendientes = await listarPendientesRecordatorio();
+  res.json(pendientes);
 }
