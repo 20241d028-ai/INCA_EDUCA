@@ -28,6 +28,8 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/carreras", carrerasRoutes);
+app.use("/api/notificaciones", notificacionesRoutes);
+app.use("/api/galeria", galeriaRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
