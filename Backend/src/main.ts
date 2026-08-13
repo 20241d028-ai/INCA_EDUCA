@@ -7,6 +7,8 @@ import authRoutes from "./modules/auth/routes";
 import chatRoutes from "./modules/chat/routes";
 import webhooksRoutes from "./modules/webhooks/routes";
 import whatsappRoutes from "./modules/whatsapp/routes";
+import notificacionesRoutes from "./modules/notificaciones/routes";
+import galeriaRoutes from "./modules/galeria/routes";
 
 
 dotenv.config();
