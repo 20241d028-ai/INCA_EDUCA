@@ -23,6 +23,12 @@ function base64ToBlobUrl(base64: string, mime: string) {
   return URL.createObjectURL(new Blob([byteArray], { type: mime }));
 }
 
+function formatearTiempo(segundos: number) {
+  const min = Math.floor(segundos / 60);
+  const seg = segundos % 60;
+  return `${min}:${seg.toString().padStart(2, "0")}`;
+}
+
 export default function ChatWidget() {
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([
@@ -35,14 +41,18 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [cargando, setCargando] = useState(false);
   const [grabando, setGrabando] = useState(false);
+  const [segundosGrabando, setSegundosGrabando] = useState(0);
+  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [mostrarFormAsesor, setMostrarFormAsesor] = useState(false);
   const finRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [mensajes, mostrarFormAsesor]);
+  }, [mensajes, mostrarFormAsesor, previewUrl]);
 
   async function enviarMensaje() {
     if (!input.trim() || cargando) return;
@@ -71,6 +81,7 @@ export default function ChatWidget() {
   }
 
   async function iniciarGrabacion() {
+    if (grabando || previewUrl) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -91,12 +102,18 @@ export default function ChatWidget() {
         stream.getTracks().forEach((track) => track.stop());
         const tipoReal = mediaRecorder.mimeType || "audio/webm";
         const audioBlob = new Blob(chunksRef.current, { type: tipoReal });
-        enviarAudio(audioBlob);
+        setPreviewBlob(audioBlob);
+        setPreviewUrl(URL.createObjectURL(audioBlob));
       };
 
       mediaRecorder.start();
       mediaRecorderRef.current = mediaRecorder;
       setGrabando(true);
+      setSegundosGrabando(0);
+
+      intervalRef.current = setInterval(() => {
+        setSegundosGrabando((s) => s + 1);
+      }, 1000);
     } catch {
       setMensajes((prev) => [
         ...prev,
@@ -109,8 +126,28 @@ export default function ChatWidget() {
   }
 
   function detenerGrabacion() {
-    mediaRecorderRef.current?.stop();
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
     setGrabando(false);
+  }
+
+  function descartarPreview() {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewBlob(null);
+    setPreviewUrl(null);
+    setSegundosGrabando(0);
+  }
+
+  async function confirmarEnvioAudio() {
+    if (!previewBlob) return;
+    const blobAEnviar = previewBlob;
+    descartarPreview();
+    await enviarAudio(blobAEnviar);
   }
 
   async function enviarAudio(audioBlob: Blob) {
@@ -175,7 +212,7 @@ export default function ChatWidget() {
                     : "bg-[var(--color-fondo)] text-[var(--color-tinta)] mr-auto rounded-bl-sm"
                 }`}
               >
-               {m.audioUrl ? (
+                {m.audioUrl ? (
                   <audio key={m.audioUrl} controls preload="auto" src={m.audioUrl} className="h-8 max-w-[220px]" />
                 ) : (
                   m.contenido
@@ -205,7 +242,7 @@ export default function ChatWidget() {
           </div>
 
           <div className="border-t border-[var(--color-linea)] p-3">
-            {!mostrarFormAsesor && (
+            {!mostrarFormAsesor && !grabando && !previewUrl && (
               <button
                 onClick={() => setMostrarFormAsesor(true)}
                 className="w-full mb-2 text-xs font-semibold text-[var(--color-naranja)] hover:underline"
@@ -213,51 +250,66 @@ export default function ChatWidget() {
                 ¿Quieres hablar con un asesor? Toca aquí
               </button>
             )}
-            <div className="flex gap-2 items-center">
-              {grabando ? (
-                <div className="flex-1 flex items-center gap-1 rounded-full border border-red-300 bg-red-50 px-4 py-2.5 h-[38px]">
-                  <span className="text-xs text-red-600 font-semibold mr-1">Escuchando</span>
-                  <span className="flex items-end gap-0.5 h-4">
-                    <span className="w-0.5 bg-red-500 rounded-full animate-[eq1_0.6s_ease-in-out_infinite]" />
-                    <span className="w-0.5 bg-red-500 rounded-full animate-[eq2_0.5s_ease-in-out_infinite]" />
-                    <span className="w-0.5 bg-red-500 rounded-full animate-[eq3_0.7s_ease-in-out_infinite]" />
-                    <span className="w-0.5 bg-red-500 rounded-full animate-[eq2_0.5s_ease-in-out_infinite]" />
-                    <span className="w-0.5 bg-red-500 rounded-full animate-[eq1_0.6s_ease-in-out_infinite]" />
-                  </span>
-                </div>
-              ) : (
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && enviarMensaje()}
-                  placeholder="Escribe tu mensaje…"
-                  className="flex-1 rounded-full border border-[var(--color-linea)] px-4 py-2 text-sm outline-none focus:border-[var(--color-verde)]"
-                />
-              )}
-              <button
-                onPointerDown={(e) => {
-                  e.preventDefault();
-                  iniciarGrabacion();
-                }}
-                onPointerUp={detenerGrabacion}
-                onPointerLeave={() => grabando && detenerGrabacion()}
-                onPointerCancel={() => grabando && detenerGrabacion()}
-                aria-label="Mantén presionado para grabar un audio"
-                className={`rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 transition ${
-                  grabando ? "bg-red-500 text-white scale-110" : "bg-[var(--color-fondo)] text-[var(--color-tinta)]"
-                }`}
-              >
-                🎤
-              </button>
-              <button
-                onClick={enviarMensaje}
-                disabled={cargando || grabando}
-                className="rounded-full bg-[var(--color-verde)] text-white w-10 h-10 flex items-center justify-center disabled:opacity-50 flex-shrink-0"
-                aria-label="Enviar mensaje"
-              >
-                →
-              </button>
-            </div>
+
+            {previewUrl ? (
+              <div className="flex items-center gap-2">
+                <audio controls preload="auto" src={previewUrl} className="flex-1 h-9" />
+                <button
+                  onClick={descartarPreview}
+                  aria-label="Descartar audio"
+                  className="rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 bg-[var(--color-fondo)] text-[var(--color-tinta)]"
+                >
+                  🗑️
+                </button>
+                <button
+                  onClick={confirmarEnvioAudio}
+                  disabled={cargando}
+                  aria-label="Enviar audio"
+                  className="rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 bg-[var(--color-verde)] text-white disabled:opacity-50"
+                >
+                  →
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2 items-center">
+                {grabando ? (
+                  <div className="flex-1 flex items-center gap-2 rounded-full border border-red-300 bg-red-50 px-4 py-2.5 h-[38px]">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+                    <span className="text-xs text-red-600 font-semibold">Escuchando…</span>
+                    <span className="text-xs text-red-500 ml-auto tabular-nums">
+                      {formatearTiempo(segundosGrabando)}
+                    </span>
+                  </div>
+                ) : (
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && enviarMensaje()}
+                    placeholder="Escribe tu mensaje…"
+                    className="flex-1 rounded-full border border-[var(--color-linea)] px-4 py-2 text-sm outline-none focus:border-[var(--color-verde)]"
+                  />
+                )}
+                <button
+                  onClick={grabando ? detenerGrabacion : iniciarGrabacion}
+                  aria-label={grabando ? "Detener grabación" : "Grabar un audio"}
+                  className={`rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 transition ${
+                    grabando ? "bg-red-500 text-white scale-110" : "bg-[var(--color-fondo)] text-[var(--color-tinta)]"
+                  }`}
+                >
+                  {grabando ? "⏹️" : "🎤"}
+                </button>
+                {!grabando && (
+                  <button
+                    onClick={enviarMensaje}
+                    disabled={cargando}
+                    className="rounded-full bg-[var(--color-verde)] text-white w-10 h-10 flex items-center justify-center disabled:opacity-50 flex-shrink-0"
+                    aria-label="Enviar mensaje"
+                  >
+                    →
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
