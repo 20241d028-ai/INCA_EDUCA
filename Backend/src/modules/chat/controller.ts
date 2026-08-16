@@ -43,7 +43,7 @@ export async function postMensajeAudio(req: Request, res: Response) {
     const audioBlob = new Blob([new Uint8Array(req.file.buffer)], { type: req.file.mimetype });
     formData.append("audio", audioBlob, "audio.webm");
 
-    const sttResponse = await fetch("http://localhost:5001/transcribir", {
+    const sttResponse = await fetch(`${process.env.STT_SERVICE_URL}/transcribir`, {
       method: "POST",
       body: formData,
     });
@@ -53,7 +53,7 @@ export async function postMensajeAudio(req: Request, res: Response) {
     const nuevoHistorial = [...historial, { remitente: "postulante", contenido: texto }];
     const respuesta = await generarRespuestaAgente(nuevoHistorial);
 
-    const ttsResponse = await fetch("http://localhost:5001/generar-audio", {
+    const ttsResponse = await fetch(`${process.env.STT_SERVICE_URL}/generar-audio`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto: respuesta }),
