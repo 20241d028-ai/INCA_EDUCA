@@ -175,8 +175,8 @@ export default function ChatWidget() {
                     : "bg-[var(--color-fondo)] text-[var(--color-tinta)] mr-auto rounded-bl-sm"
                 }`}
               >
-                {m.audioUrl ? (
-                  <audio controls src={m.audioUrl} className="h-8 max-w-[220px]" />
+               {m.audioUrl ? (
+                  <audio key={m.audioUrl} controls preload="auto" src={m.audioUrl} className="h-8 max-w-[220px]" />
                 ) : (
                   m.contenido
                 )}
@@ -235,11 +235,13 @@ export default function ChatWidget() {
                 />
               )}
               <button
-                onMouseDown={iniciarGrabacion}
-                onMouseUp={detenerGrabacion}
-                onMouseLeave={() => grabando && detenerGrabacion()}
-                onTouchStart={iniciarGrabacion}
-                onTouchEnd={detenerGrabacion}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  iniciarGrabacion();
+                }}
+                onPointerUp={detenerGrabacion}
+                onPointerLeave={() => grabando && detenerGrabacion()}
+                onPointerCancel={() => grabando && detenerGrabacion()}
                 aria-label="Mantén presionado para grabar un audio"
                 className={`rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 transition ${
                   grabando ? "bg-red-500 text-white scale-110" : "bg-[var(--color-fondo)] text-[var(--color-tinta)]"
