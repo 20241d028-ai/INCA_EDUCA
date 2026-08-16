@@ -79,8 +79,9 @@ export async function loginAdmin(email: string, password: string) {
   }
 
   export async function enviarMensajeAudio(audioBlob: Blob, historial: MensajeChat[]) {
+    const extension = audioBlob.type.includes("mp4") ? "mp4" : "webm";
     const formData = new FormData();
-    formData.append("audio", audioBlob, "audio.webm");
+    formData.append("audio", audioBlob, `audio.${extension}`);
     formData.append("historial", JSON.stringify(historial));
   
     const res = await fetch(`${API_URL}/api/chat/mensaje-audio`, {

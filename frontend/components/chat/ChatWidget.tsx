@@ -71,34 +71,7 @@ export default function ChatWidget() {
   }
 
   async function iniciarGrabacion() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-
-      mediaRecorder.onstop = () => {
-        stream.getTracks().forEach((track) => track.stop());
-        const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
-        enviarAudio(audioBlob);
-      };
-
-      mediaRecorder.start();
-      mediaRecorderRef.current = mediaRecorder;
-      setGrabando(true);
-    } catch {
-      setMensajes((prev) => [
-        ...prev,
-        {
-          remitente: "agente",
-          contenido: "No pude acceder al micrófono. Revisa los permisos del navegador.",
-        },
-      ]);
-    }
-  }
 
   function detenerGrabacion() {
     mediaRecorderRef.current?.stop();
@@ -347,4 +320,4 @@ function FormularioAsesor({
       </div>
     </div>
   );
-}
+}}

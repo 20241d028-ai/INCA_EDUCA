@@ -22,7 +22,8 @@ modelo_whisper = WhisperModel("small", device="cpu", compute_type="int8")
 
 @app.post("/transcribir")
 async def transcribir(audio: UploadFile = File(...)):
-    with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
+    extension = os.path.splitext(audio.filename or "audio.webm")[1] or ".webm"
+    with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as tmp:
         contenido = await audio.read()
         tmp.write(contenido)
         ruta_temporal = tmp.name
