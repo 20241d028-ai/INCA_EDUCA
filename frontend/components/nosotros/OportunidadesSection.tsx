@@ -18,7 +18,7 @@ export default function OportunidadesSection() {
 
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <FadeIn>
-            <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-white">
+            <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white">
               Educación que abre oportunidades
             </h2>
             <p className="mt-4 text-white/85 leading-relaxed max-w-xl mx-auto">

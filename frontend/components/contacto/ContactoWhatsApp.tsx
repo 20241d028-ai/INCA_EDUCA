@@ -12,7 +12,7 @@ export default function ContactoWhatsApp() {
               <IconWhatsApp className="w-8 h-8" />
             </div>
 
-            <h2 className="mt-6 font-titulo text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="mt-6 font-titulo text-2xl sm:text-3xl font-bold text-white">
               ¿Prefieres comunicarte directamente con nosotros?
             </h2>
             <p className="mt-4 text-white/90 leading-relaxed max-w-xl mx-auto">
@@ -24,7 +24,7 @@ export default function ContactoWhatsApp() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 mt-9 rounded-full bg-white text-[var(--color-verde-oscuro)] font-bold px-8 py-4 shadow-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl"
+              className="group inline-flex items-center justify-center gap-2 mt-9 rounded-full bg-white text-[var(--color-verde-oscuro)] font-semibold px-8 py-4 shadow-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl"
             >
               <IconWhatsApp className="w-5 h-5 transition-transform duration-300 ease-out group-hover:scale-110" />
               Abrir WhatsApp

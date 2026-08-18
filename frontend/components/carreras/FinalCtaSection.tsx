@@ -30,14 +30,14 @@ export default function FinalCtaSection() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/admision"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-8 py-4 shadow-lg hover:brightness-95 transition"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-4 shadow-lg hover:brightness-95 transition"
             >
               POSTULA AHORA
               <span aria-hidden="true">→</span>
             </Link>
             <Link
               href="#carreras"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-bold px-8 py-4 hover:bg-white hover:text-[var(--color-verde-oscuro)] transition"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-semibold px-8 py-4 hover:bg-white hover:text-[var(--color-verde-oscuro)] transition"
             >
               VER CARRERAS
             </Link>

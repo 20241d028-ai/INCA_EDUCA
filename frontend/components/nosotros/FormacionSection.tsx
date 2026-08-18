@@ -17,7 +17,7 @@ export default function FormacionSection() {
     <section className="bg-white py-20">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)]">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)]">
             Formación técnica para nuevas oportunidades
           </h2>
           <p className="mt-4 text-[var(--color-tinta)]/70 max-w-2xl mx-auto leading-relaxed">
@@ -43,7 +43,7 @@ export default function FormacionSection() {
         <FadeIn delay={250}>
           <Link
             href="/carreras"
-            className="inline-flex items-center gap-2 mt-10 rounded-full bg-[var(--color-naranja)] text-white font-bold px-7 py-3.5 shadow-md hover:brightness-95 transition"
+            className="inline-flex items-center gap-2 mt-10 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-7 py-3.5 shadow-md hover:brightness-95 transition"
           >
             Ver todas las carreras
             <span aria-hidden="true">→</span>

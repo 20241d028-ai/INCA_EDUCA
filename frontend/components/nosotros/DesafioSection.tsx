@@ -10,7 +10,7 @@ export default function DesafioSection() {
             En trámite
           </span>
 
-          <h2 className="mt-5 font-titulo text-3xl md:text-4xl font-extrabold text-white">
+          <h2 className="mt-5 font-titulo text-3xl md:text-4xl font-bold text-white">
             Nuestro próximo desafío
           </h2>
           <p className="mt-4 text-white/85 leading-relaxed max-w-xl mx-auto">

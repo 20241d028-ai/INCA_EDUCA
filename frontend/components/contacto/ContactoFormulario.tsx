@@ -83,7 +83,7 @@ export default function ContactoFormulario() {
               <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-verde)]/10 text-[var(--color-verde)] flex items-center justify-center">
                 <IconCheck className="w-9 h-9" />
               </div>
-              <h3 className="mt-6 font-titulo text-2xl font-extrabold text-[var(--color-verde-oscuro)]">
+              <h3 className="mt-6 font-titulo text-2xl font-semibold text-[var(--color-verde-oscuro)]">
                 Mensaje enviado correctamente
               </h3>
               <p className="mt-3 text-[var(--color-tinta)]/70 leading-relaxed max-w-md mx-auto">
@@ -101,7 +101,7 @@ export default function ContactoFormulario() {
     <section id="formulario" className="bg-white py-20 scroll-mt-24">
       <div className="max-w-3xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)] text-center">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Cuéntanos cómo podemos ayudarte
           </h2>
           <p className="mt-3 text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
@@ -216,7 +216,7 @@ export default function ContactoFormulario() {
               <button
                 type="submit"
                 disabled={enviando}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-8 py-3.5 shadow-md transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-3.5 shadow-md transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0"
               >
                 <IconSend className="w-4 h-4" />
                 {enviando ? "Enviando…" : "Enviar consulta →"}

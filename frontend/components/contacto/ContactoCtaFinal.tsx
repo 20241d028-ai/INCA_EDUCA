@@ -32,13 +32,13 @@ export default function ContactoCtaFinal() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/carreras"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-bold px-8 py-4 transition-all duration-300 ease-out hover:bg-white hover:text-[var(--color-verde-oscuro)]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-semibold px-8 py-4 transition-all duration-300 ease-out hover:bg-white hover:text-[var(--color-verde-oscuro)]"
               >
                 CONOCE NUESTRAS CARRERAS
               </Link>
               <Link
                 href="/admision"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-8 py-4 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-4 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5"
               >
                 POSTULA AHORA
                 <span aria-hidden="true">→</span>

@@ -12,11 +12,16 @@
 body {
   background: var(--color-fondo);
   color: var(--color-tinta);
-  font-family: var(--font-nunito), sans-serif;
+  font-family: var(--font-jakarta), sans-serif;
 }
 
+/* Tipografia de titulos (h1/h2/h3 y textos destacados) en todo el sitio.
+   El peso (font-extrabold/bold/semibold) y el tamaño se definen en cada
+   componente segun su jerarquia; aqui solo se fija la familia tipografica
+   y un tracking ligeramente negativo, consistente con un look moderno. */
 .font-titulo {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta), sans-serif;
+  letter-spacing: -0.02em;
 }
 
 @keyframes eq1 {

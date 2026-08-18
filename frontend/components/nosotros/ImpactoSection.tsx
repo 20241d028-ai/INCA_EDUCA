@@ -14,7 +14,7 @@ export default function ImpactoSection() {
     <section className="bg-[var(--color-verde-oscuro)] py-20">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-white text-center">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white text-center">
             Nuestro impacto
           </h2>
         </FadeIn>

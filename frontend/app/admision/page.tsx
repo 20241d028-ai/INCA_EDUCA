@@ -62,7 +62,7 @@ export default function AdmisionPage() {
   if (exito) {
     return (
       <main className="pt-24 pb-20 max-w-2xl mx-auto px-6 text-center">
-        <h1 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-tinta)]">
+        <h1 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-tinta)]">
           ¡Postulación enviada!
         </h1>
         <p className="mt-4 text-[var(--color-tinta)]/70 leading-relaxed">
@@ -75,7 +75,7 @@ export default function AdmisionPage() {
 
   return (
     <main className="pt-24 pb-20 max-w-2xl mx-auto px-6">
-      <h1 className="font-titulo text-4xl font-extrabold text-[var(--color-tinta)]">
+      <h1 className="font-titulo text-4xl font-bold text-[var(--color-tinta)]">
         Postula ahora
       </h1>
       <p className="mt-2 text-[var(--color-tinta)]/70">
@@ -158,7 +158,7 @@ export default function AdmisionPage() {
         <button
           type="submit"
           disabled={enviando}
-          className="w-full rounded-full bg-[var(--color-verde)] text-white font-bold py-3 hover:brightness-95 transition disabled:opacity-50"
+          className="w-full rounded-full bg-[var(--color-verde)] text-white font-semibold py-3 hover:brightness-95 transition disabled:opacity-50"
         >
           {enviando ? "Enviando…" : "Enviar postulación"}
         </button>

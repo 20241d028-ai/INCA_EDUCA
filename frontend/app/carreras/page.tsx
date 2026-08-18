@@ -15,7 +15,7 @@ export default async function CarrerasPage() {
     <main id="carreras" className="pt-24">
       <div className="flex flex-col lg:flex-row">
         <div className="lg:w-[58%] px-6 sm:px-10 lg:px-12 py-10">
-          <h1 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)]">
+          <h1 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)]">
             Conoce nuestras{" "}
             <span className="relative inline-block text-[var(--color-naranja)]">
               carreras

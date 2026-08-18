@@ -30,7 +30,7 @@ export default function AdminShell({
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-tinta)]/40">
               Panel administrativo · INCA EDUCA
             </p>
-            <h1 className="font-titulo text-xl font-extrabold text-[var(--color-verde-oscuro)]">
+            <h1 className="font-titulo text-xl font-semibold text-[var(--color-verde-oscuro)]">
               {titulo}
             </h1>
           </Link>
@@ -47,7 +47,7 @@ export default function AdminShell({
             <button
               type="button"
               onClick={onSalir}
-              className="text-sm font-bold text-[var(--color-naranja)] hover:brightness-90 transition"
+              className="text-sm font-semibold text-[var(--color-naranja)] hover:brightness-90 transition"
             >
               Salir
             </button>
@@ -63,7 +63,7 @@ export default function AdminShell({
               <Link
                 key={s.href}
                 href={s.href}
-                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition ${
                   activa
                     ? "bg-[var(--color-verde)] text-white"
                     : "bg-[var(--color-fondo)] text-[var(--color-tinta)]/70 hover:bg-[var(--color-verde)]/10 hover:text-[var(--color-verde-oscuro)]"

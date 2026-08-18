@@ -28,7 +28,7 @@ export default function QuienesSomos() {
     <section className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)]">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)]">
             ¿Quiénes somos?
           </h2>
 

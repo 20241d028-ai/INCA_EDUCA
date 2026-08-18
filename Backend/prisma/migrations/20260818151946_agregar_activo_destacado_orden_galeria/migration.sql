@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "galeria" ADD COLUMN     "activo" BOOLEAN NOT NULL DEFAULT true,
+ADD COLUMN     "destacado" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "orden" INTEGER NOT NULL DEFAULT 0;

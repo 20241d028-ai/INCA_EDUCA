@@ -26,7 +26,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#3A3937] text-white/80">
-      <div className="max-w-6xl mx-auto px-8 py-14 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10">
+      <div className="max-w-6xl mx-auto px-8 py-7 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-x-10 gap-y-6">
         <div>
           <Image
             src="/logo.png"
@@ -36,15 +36,15 @@ export default function Footer() {
             unoptimized
             className="h-auto w-[140px]"
           />
-          <p className="mt-4 font-titulo font-bold text-white/90">
+          <p className="mt-2 font-titulo font-bold text-white/90">
             Formando profesionales para construir el futuro.
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-white/60">
+          <p className="mt-1 text-sm leading-snug text-white/60">
             Centro de Educación Técnico-Productiva en Cusco, formando
             profesionales técnicos en turismo y gastronomía desde 2002.
           </p>
 
-          <div id="contacto" className="mt-5 flex flex-col gap-1.5 text-sm text-white/60 scroll-mt-28">
+          <div id="contacto" className="mt-3 flex flex-col gap-1 text-sm text-white/60 scroll-mt-28">
             <p>Teléfono: (084) 275994</p>
             <p>Correo: info@incaeduca.edu.pe</p>
             <p>Prol. Av. la Cultura, 6º paradero San Sebastián, Cusco</p>
@@ -53,7 +53,7 @@ export default function Footer() {
 
         <div>
           <h3 className="font-titulo font-bold text-white">Institución</h3>
-          <nav className="mt-4 flex flex-col gap-2">
+          <nav className="mt-2 flex flex-col gap-1.5">
             {ENLACES_INSTITUCION.map((e) => (
               <Link
                 key={e.href}
@@ -68,7 +68,7 @@ export default function Footer() {
 
         <div>
           <h3 className="font-titulo font-bold text-white">Información</h3>
-          <nav className="mt-4 flex flex-col gap-2">
+          <nav className="mt-2 flex flex-col gap-1.5">
             {ENLACES_INFORMACION.map((e) => (
               <Link
                 key={e.href}
@@ -83,7 +83,7 @@ export default function Footer() {
 
         <div>
           <h3 className="font-titulo font-bold text-white">Síguenos</h3>
-          <div className="mt-4 flex flex-col gap-2">
+          <div className="mt-2 flex flex-col gap-1.5">
             {REDES.map((r) => {
               const Icono = r.icono;
               return (
@@ -101,7 +101,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10 py-5">
+      <div className="border-t border-white/10 py-2.5">
         <p className="text-center text-xs text-white/50">
           © {anio} INCA EDUCA. Todos los derechos reservados.
         </p>

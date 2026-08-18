@@ -44,7 +44,7 @@ export default function NosotrosHero() {
           <FadeIn delay={300}>
             <Link
               href="/carreras"
-              className="inline-flex items-center gap-2 mt-9 rounded-full bg-[var(--color-naranja)] text-white font-bold px-7 py-3.5 shadow-lg hover:brightness-95 transition"
+              className="inline-flex items-center gap-2 mt-9 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-7 py-3.5 shadow-lg hover:brightness-95 transition"
             >
               Conoce nuestras carreras
               <span aria-hidden="true">→</span>

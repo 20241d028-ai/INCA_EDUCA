@@ -27,7 +27,7 @@ export default function WhyStudySection() {
   return (
     <section className="bg-[var(--color-verde-oscuro)] py-20">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-white text-center">
+        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white text-center">
           ¿Por qué estudiar en INCA EDUCA?
         </h2>
         <p className="mt-3 text-white/70 text-center max-w-xl mx-auto">
@@ -45,7 +45,7 @@ export default function WhyStudySection() {
                 <div className="w-14 h-14 rounded-2xl bg-[var(--color-naranja)]/10 flex items-center justify-center text-[var(--color-naranja)] transition-colors duration-300 group-hover:bg-[var(--color-naranja)] group-hover:text-white">
                   <Icono className="w-7 h-7" />
                 </div>
-                <h3 className="font-titulo font-extrabold text-lg mt-5 text-[var(--color-verde-oscuro)]">
+                <h3 className="font-titulo font-semibold text-lg mt-5 text-[var(--color-verde-oscuro)]">
                   {p.titulo}
                 </h3>
                 <p className="mt-2 text-sm text-[var(--color-tinta)]/70 leading-relaxed">

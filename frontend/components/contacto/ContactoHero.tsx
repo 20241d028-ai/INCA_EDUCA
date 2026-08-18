@@ -37,14 +37,14 @@ export default function ContactoHero() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-7 py-3.5 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 hover:shadow-xl"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-7 py-3.5 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 hover:shadow-xl"
               >
                 <IconWhatsApp className="w-5 h-5" />
                 Hablar por WhatsApp
               </a>
               <Link
                 href="/carreras"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 text-white font-bold px-7 py-3.5 transition-all duration-300 ease-out hover:bg-white/20"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 text-white font-semibold px-7 py-3.5 transition-all duration-300 ease-out hover:bg-white/20"
               >
                 Ver nuestras carreras
                 <span aria-hidden="true">→</span>

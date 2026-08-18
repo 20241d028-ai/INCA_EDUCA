@@ -280,7 +280,7 @@ export default function Hero() {
             >
               <Link
                 href={slide.ctaPrimario.href}
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-6 sm:px-7 py-3.5 shadow-sm hover:brightness-95 hover:-translate-y-0.5 transition"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-6 sm:px-7 py-3.5 shadow-sm hover:brightness-95 hover:-translate-y-0.5 transition"
               >
                 {slide.ctaPrimario.label}
                 <span aria-hidden="true">→</span>

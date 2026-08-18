@@ -48,7 +48,7 @@ export default function ContactoUbicacion() {
     <section id="ubicacion" className="bg-[var(--color-fondo)] py-20 scroll-mt-24">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)] text-center">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Encuéntranos
           </h2>
         </FadeIn>
@@ -69,7 +69,7 @@ export default function ContactoUbicacion() {
 
           <FadeIn delay={200}>
             <div className="h-full rounded-3xl bg-white border border-[var(--color-linea)] p-8 sm:p-10">
-              <h3 className="font-titulo text-2xl font-extrabold text-[var(--color-verde-oscuro)]">
+              <h3 className="font-titulo text-2xl font-semibold text-[var(--color-verde-oscuro)]">
                 INCA EDUCA
               </h3>
 
@@ -108,7 +108,7 @@ export default function ContactoUbicacion() {
                 href={MAPA_COMO_LLEGAR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-8 rounded-full bg-[var(--color-verde-oscuro)] text-white font-bold px-6 py-3 transition-all duration-300 ease-out hover:brightness-110 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 mt-8 rounded-full bg-[var(--color-verde-oscuro)] text-white font-semibold px-6 py-3 transition-all duration-300 ease-out hover:brightness-110 hover:-translate-y-0.5"
               >
                 Cómo llegar
                 <span aria-hidden="true">→</span>

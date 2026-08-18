@@ -37,7 +37,7 @@ export default function ContactoTarjetas() {
     <section className="bg-[var(--color-fondo)] py-20">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)] text-center">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
             ¿Cómo podemos ayudarte?
           </h2>
         </FadeIn>
@@ -54,7 +54,7 @@ export default function ContactoTarjetas() {
                   <div className="w-14 h-14 rounded-2xl bg-[var(--color-verde)]/10 text-[var(--color-verde)] flex items-center justify-center transition-transform duration-300 ease-out group-hover:scale-110 group-hover:bg-[var(--color-verde)] group-hover:text-white">
                     <Icono className="w-7 h-7" />
                   </div>
-                  <h3 className="font-titulo font-extrabold text-xl mt-5 text-[var(--color-verde-oscuro)]">
+                  <h3 className="font-titulo font-semibold text-xl mt-5 text-[var(--color-verde-oscuro)]">
                     {t.titulo}
                   </h3>
                   <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-tinta)]/50">

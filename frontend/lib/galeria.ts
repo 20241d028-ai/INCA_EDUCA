@@ -48,30 +48,31 @@ export interface CarruselGaleriaConfig {
   descripcion: string;
 }
 
+// El titulo de cada carrusel usa la MISMA etiqueta visible que ya se
+// muestra en el resto del sitio (CATEGORIA_GALERIA_META), para que la
+// Galeria se lea como secciones institucionales claras (INCA EDUCA,
+// GRADUACIONES, ACTIVIDADES, NUESTROS ESTUDIANTES) en vez de titulos
+// libres. Son solo textos de presentacion: no se guardan en la BD.
 export const CARRUSELES_GALERIA: CarruselGaleriaConfig[] = [
   {
-    categoria: "eventos_institucionales", // etiqueta: ACTIVIDADES
-    titulo: "Actividades que inspiran",
-    descripcion:
-      "Descubre las experiencias, talleres y actividades que complementan la formación de nuestros estudiantes.",
-  },
-  {
-    categoria: "nuestros_espacios", // etiqueta: NUESTROS ESTUDIANTES
-    titulo: "Nuestros estudiantes",
-    descripcion:
-      "Cada experiencia forma parte del camino de nuestros estudiantes hacia su desarrollo profesional.",
+    categoria: "actividades_academicas", // etiqueta: INCA EDUCA
+    titulo: "INCA EDUCA",
+    descripcion: "Conoce a quienes forman parte de nuestra comunidad educativa.",
   },
   {
     categoria: "talleres_practicas", // etiqueta: GRADUACIONES
-    titulo: "Celebramos sus logros",
-    descripcion:
-      "Compartimos algunos de los momentos más importantes de nuestros estudiantes durante su graduación.",
+    titulo: "GRADUACIONES",
+    descripcion: "Celebramos el esfuerzo y los logros de nuestros estudiantes.",
   },
   {
-    categoria: "actividades_academicas", // etiqueta: INCA EDUCA
-    titulo: "Conoce INCA EDUCA",
-    descripcion:
-      "Un entorno preparado para acompañar el crecimiento académico y profesional de nuestros estudiantes.",
+    categoria: "eventos_institucionales", // etiqueta: ACTIVIDADES
+    titulo: "ACTIVIDADES",
+    descripcion: "Experiencias que fortalecen nuestra formación y comunidad.",
+  },
+  {
+    categoria: "nuestros_espacios", // etiqueta: NUESTROS ESTUDIANTES
+    titulo: "NUESTROS ESTUDIANTES",
+    descripcion: "Momentos y experiencias de nuestros estudiantes.",
   },
 ];
 

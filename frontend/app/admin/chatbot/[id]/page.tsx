@@ -55,7 +55,7 @@ export default function ChatbotDetallePage() {
       {data && (
         <>
           <div className="bg-white rounded-2xl border border-[var(--color-linea)] p-6 shadow-sm">
-            <h2 className="font-titulo text-xl font-extrabold text-[var(--color-verde-oscuro)]">
+            <h2 className="font-titulo text-xl font-semibold text-[var(--color-verde-oscuro)]">
               {data.postulante.nombreApellido}
             </h2>
             <p className="mt-1 text-sm text-[var(--color-tinta)]/70">
@@ -66,7 +66,7 @@ export default function ChatbotDetallePage() {
               href={`https://wa.me/51${data.postulante.celular}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#25D366] text-white text-sm font-bold px-5 py-2.5 hover:brightness-95 transition"
+              className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#25D366] text-white text-sm font-semibold px-5 py-2.5 hover:brightness-95 transition"
             >
               Contactar por WhatsApp
             </a>

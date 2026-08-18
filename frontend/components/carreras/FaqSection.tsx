@@ -41,7 +41,7 @@ export default function FaqSection() {
   return (
     <section className="bg-[var(--color-fondo)] py-20">
       <div className="max-w-3xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)] text-center">
+        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
           Preguntas frecuentes
         </h2>
         <p className="mt-3 text-[var(--color-tinta)]/70 text-center">

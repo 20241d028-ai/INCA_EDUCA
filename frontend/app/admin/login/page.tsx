@@ -32,7 +32,7 @@ export default function AdminLoginPage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-tinta)]/40">
           Panel administrativo
         </p>
-        <h1 className="font-titulo text-2xl font-extrabold text-[var(--color-verde-oscuro)]">
+        <h1 className="font-titulo text-2xl font-semibold text-[var(--color-verde-oscuro)]">
           INCA EDUCA
         </h1>
 
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={cargando}
-            className="mt-2 w-full rounded-full bg-[var(--color-naranja)] text-white font-bold py-2.5 transition hover:brightness-95 disabled:opacity-60"
+            className="mt-2 w-full rounded-full bg-[var(--color-naranja)] text-white font-semibold py-2.5 transition hover:brightness-95 disabled:opacity-60"
           >
             {cargando ? "Ingresando..." : "Ingresar"}
           </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IconChevronLeft, IconChevronRight } from "@/components/ui/Icons";
+import { IconChevronLeft, IconChevronRight, IconPlay } from "@/components/ui/Icons";
 import { CATEGORIA_GALERIA_META, type GaleriaItem } from "@/lib/galeria";
 
 type Variante = "grid" | "featured";
@@ -105,11 +105,23 @@ export default function GaleriaCarrusel({
 
   return (
     <section className="py-8 sm:py-10">
-      <div className="max-w-6xl mx-auto px-6">
-        <h3 className="font-titulo text-2xl sm:text-3xl font-extrabold text-[var(--color-verde-oscuro)]">
-          {titulo}
-        </h3>
-        <p className="mt-2 max-w-2xl text-[var(--color-tinta)]/70 leading-relaxed">{descripcion}</p>
+      <div className="max-w-6xl mx-auto px-6 flex items-end justify-between gap-4">
+        <div>
+          <h3 className="font-titulo text-2xl sm:text-3xl font-bold text-[var(--color-verde-oscuro)]">
+            {titulo}
+          </h3>
+          <p className="mt-2 max-w-2xl text-[var(--color-tinta)]/70 leading-relaxed">{descripcion}</p>
+        </div>
+        {fotos.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onAbrir(0)}
+            className="inline-flex items-center gap-1.5 flex-shrink-0 text-sm font-semibold text-[var(--color-naranja)] hover:gap-2.5 transition-all duration-200"
+          >
+            Ver todo
+            <span aria-hidden="true">→</span>
+          </button>
+        )}
       </div>
 
       {fotos.length === 0 ? (
@@ -136,7 +148,7 @@ export default function GaleriaCarrusel({
                   className={`group snap-start shrink-0 text-left ${
                     variante === "featured"
                       ? "basis-full"
-                      : "basis-[82%] sm:basis-[46%] lg:basis-[31.5%]"
+                      : "basis-[82%] sm:basis-[46%] lg:basis-[23%]"
                   }`}
                 >
                   <div
@@ -154,6 +166,17 @@ export default function GaleriaCarrusel({
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                       />
+                    )}
+
+                    {foto.tipo === "video" && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                      >
+                        <span className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/90 text-[var(--color-verde-oscuro)] shadow-md backdrop-blur-sm transition-transform duration-300 ease-out group-hover:scale-110">
+                          <IconPlay className="w-5 h-5 sm:w-6 sm:h-6 ml-0.5" />
+                        </span>
+                      </span>
                     )}
 
                     {variante === "featured" ? (

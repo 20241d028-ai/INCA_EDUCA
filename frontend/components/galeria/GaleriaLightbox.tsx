@@ -126,7 +126,7 @@ export default function GaleriaLightbox({
               {categoriaLabel}
             </p>
           )}
-          <h3 className="mt-1 font-titulo text-xl font-extrabold text-white">{foto.titulo}</h3>
+          <h3 className="mt-1 font-titulo text-xl font-semibold text-white">{foto.titulo}</h3>
           {foto.evento && <p className="mt-1 text-sm text-white/70">{foto.evento}</p>}
           {fecha && <p className="mt-1 text-xs text-white/40 capitalize">{fecha}</p>}
           <p className="mt-3 text-xs font-semibold text-white/50">

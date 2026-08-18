@@ -190,16 +190,27 @@ export default function ChatWidget() {
       <button
         onClick={() => setAbierto((v) => !v)}
         aria-label={abierto ? "Cerrar chat" : "Abrir chat"}
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[var(--color-verde)] text-white shadow-lg flex items-center justify-center hover:brightness-95 transition"
+        className={`fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[var(--color-verde)] text-white shadow-lg items-center justify-center hover:brightness-95 transition ${
+          abierto ? "hidden sm:flex" : "flex"
+        }`}
       >
         {abierto ? "✕" : "💬"}
       </button>
 
       {abierto && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[90vw] h-[520px] max-h-[75vh] bg-white rounded-3xl shadow-2xl border border-[var(--color-linea)] flex flex-col overflow-hidden">
-          <div className="bg-[var(--color-verde)] text-white px-5 py-4">
-            <p className="font-titulo font-bold">Asistente INCA EDUCA</p>
-            <p className="text-xs text-white/80">Responde según nuestras carreras y servicios</p>
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 z-50 w-full sm:w-[380px] h-full sm:h-[560px] sm:max-w-[90vw] sm:max-h-[75vh] bg-white rounded-none sm:rounded-3xl shadow-2xl border-0 sm:border border-[var(--color-linea)] flex flex-col overflow-hidden">
+          <div className="bg-[var(--color-verde)] text-white px-5 py-4 flex items-center justify-between gap-3 flex-shrink-0">
+            <div>
+              <p className="font-titulo font-semibold">Asistente INCA EDUCA</p>
+              <p className="text-xs text-white/80">Responde según nuestras carreras y servicios</p>
+            </div>
+            <button
+              onClick={() => setAbierto(false)}
+              aria-label="Cerrar chat"
+              className="sm:hidden flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
+            >
+              ✕
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
@@ -241,7 +252,7 @@ export default function ChatWidget() {
             <div ref={finRef} />
           </div>
 
-          <div className="border-t border-[var(--color-linea)] p-3">
+          <div className="border-t border-[var(--color-linea)] p-3 flex-shrink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             {!mostrarFormAsesor && !grabando && !previewUrl && (
               <button
                 onClick={() => setMostrarFormAsesor(true)}

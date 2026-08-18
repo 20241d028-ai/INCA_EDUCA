@@ -32,7 +32,7 @@ export default function ApplyStepsSection() {
   return (
     <section className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-extrabold text-[var(--color-verde-oscuro)] text-center">
+        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
           ¿Cómo puedes postular?
         </h2>
         <p className="mt-3 text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
@@ -98,7 +98,7 @@ export default function ApplyStepsSection() {
         <div className="mt-16 flex justify-center">
           <Link
             href="/admision"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-bold px-8 py-3.5 shadow-md hover:brightness-95 transition"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-3.5 shadow-md hover:brightness-95 transition"
           >
             Postula ahora
             <span aria-hidden="true">→</span>

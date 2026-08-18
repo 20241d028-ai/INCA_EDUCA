@@ -47,7 +47,7 @@ export default function Header() {
             <Link
               key={e.href}
               href={e.href}
-              className="px-4 py-2 rounded-full text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+              className="px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-white/10 transition-colors"
             >
               {e.label}
             </Link>
@@ -57,7 +57,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link
             href="/admision"
-            className="rounded-full bg-[var(--color-naranja)] text-white text-sm font-bold px-4 sm:px-5 py-2.5 shadow-sm hover:brightness-95 hover:-translate-y-0.5 transition"
+            className="rounded-full bg-[var(--color-naranja)] text-white text-sm font-semibold px-4 sm:px-5 py-2.5 shadow-sm hover:brightness-95 hover:-translate-y-0.5 transition"
           >
             Postula ahora
           </Link>
@@ -80,24 +80,22 @@ export default function Header() {
         </div>
       </div>
 
-      <div
-        className={`md:hidden overflow-hidden transition-[max-height] duration-300 ease-out ${
-          menuAbierto ? "max-h-80" : "max-h-0"
-        }`}
-      >
-        <nav className="flex flex-col px-4 sm:px-8 pb-4 pt-2 gap-1 border-t border-white/10">
-          {enlaces.map((e) => (
-            <Link
-              key={e.href}
-              href={e.href}
-              onClick={() => setMenuAbierto(false)}
-              className="px-3 py-2.5 rounded-lg text-sm font-semibold text-white hover:bg-white/10 transition-colors"
-            >
-              {e.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+      {menuAbierto && (
+        <div className="md:hidden absolute top-full right-4 mt-2 w-36 rounded-xl bg-[var(--color-verde-oscuro)] shadow-xl ring-1 ring-white/10 overflow-hidden">
+          <nav className="flex flex-col p-1.5">
+            {enlaces.map((e) => (
+              <Link
+                key={e.href}
+                href={e.href}
+                onClick={() => setMenuAbierto(false)}
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-white hover:bg-white/10 transition-colors"
+              >
+                {e.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

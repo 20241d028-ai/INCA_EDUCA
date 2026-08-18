@@ -243,7 +243,7 @@ export default function AdminGaleriaPage() {
           <div className="sm:col-span-2 flex items-center gap-3 flex-wrap">
             <label
               htmlFor="archivo-galeria"
-              className="inline-flex items-center gap-2 rounded-full border-2 border-dashed border-[var(--color-verde)] text-[var(--color-verde-oscuro)] font-bold text-sm px-5 py-2.5 cursor-pointer transition hover:bg-[var(--color-verde)]/10"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-dashed border-[var(--color-verde)] text-[var(--color-verde-oscuro)] font-semibold text-sm px-5 py-2.5 cursor-pointer transition hover:bg-[var(--color-verde)]/10"
             >
               <IconUpload className="w-4 h-4" />
               Elegir archivo de la computadora
@@ -267,7 +267,7 @@ export default function AdminGaleriaPage() {
           <button
             type="submit"
             disabled={subiendo}
-            className="sm:col-span-2 rounded-full bg-[var(--color-naranja)] text-white font-bold py-2.5 transition hover:brightness-95 disabled:opacity-60"
+            className="sm:col-span-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold py-2.5 transition hover:brightness-95 disabled:opacity-60"
           >
             {subiendo ? "Subiendo…" : "Subir a la galería"}
           </button>
@@ -374,7 +374,7 @@ export default function AdminGaleriaPage() {
                         type="button"
                         onClick={() => guardarEdicion(item.id)}
                         disabled={guardandoEdicion}
-                        className="flex-1 rounded-full bg-[var(--color-verde)] text-white text-xs font-bold py-1.5 hover:brightness-95 transition disabled:opacity-60"
+                        className="flex-1 rounded-full bg-[var(--color-verde)] text-white text-xs font-semibold py-1.5 hover:brightness-95 transition disabled:opacity-60"
                       >
                         {guardandoEdicion ? "Guardando…" : "Guardar"}
                       </button>
@@ -384,7 +384,7 @@ export default function AdminGaleriaPage() {
                           setEditandoId(null);
                           setFormEdicion(null);
                         }}
-                        className="flex-1 rounded-full bg-[var(--color-fondo)] text-[var(--color-tinta)] text-xs font-bold py-1.5 hover:bg-[var(--color-linea)] transition"
+                        className="flex-1 rounded-full bg-[var(--color-fondo)] text-[var(--color-tinta)] text-xs font-semibold py-1.5 hover:bg-[var(--color-linea)] transition"
                       >
                         Cancelar
                       </button>
@@ -402,7 +402,7 @@ export default function AdminGaleriaPage() {
                         type="button"
                         onClick={() => abrirEdicion(item)}
                         title="Editar"
-                        className="inline-flex items-center gap-1 rounded-full border border-[var(--color-linea)] text-[var(--color-tinta)] text-xs font-bold px-2.5 py-1.5 hover:border-[var(--color-naranja)] hover:text-[var(--color-naranja)] transition"
+                        className="inline-flex items-center gap-1 rounded-full border border-[var(--color-linea)] text-[var(--color-tinta)] text-xs font-semibold px-2.5 py-1.5 hover:border-[var(--color-naranja)] hover:text-[var(--color-naranja)] transition"
                       >
                         <IconPencil className="w-3.5 h-3.5" />
                         Editar
@@ -412,7 +412,7 @@ export default function AdminGaleriaPage() {
                         onClick={() => alternarCampo(item, "activo")}
                         disabled={ocupado}
                         title={item.activo ? "Desactivar" : "Activar"}
-                        className="inline-flex items-center gap-1 rounded-full border border-[var(--color-linea)] text-[var(--color-tinta)] text-xs font-bold px-2.5 py-1.5 hover:border-[var(--color-verde)] hover:text-[var(--color-verde)] transition disabled:opacity-50"
+                        className="inline-flex items-center gap-1 rounded-full border border-[var(--color-linea)] text-[var(--color-tinta)] text-xs font-semibold px-2.5 py-1.5 hover:border-[var(--color-verde)] hover:text-[var(--color-verde)] transition disabled:opacity-50"
                       >
                         {item.activo ? <IconEyeOff className="w-3.5 h-3.5" /> : <IconEye className="w-3.5 h-3.5" />}
                         {item.activo ? "Desactivar" : "Activar"}
@@ -422,7 +422,7 @@ export default function AdminGaleriaPage() {
                         onClick={() => alternarCampo(item, "destacado")}
                         disabled={ocupado}
                         title={item.destacado ? "Quitar destacado" : "Destacar"}
-                        className={`inline-flex items-center gap-1 rounded-full border text-xs font-bold px-2.5 py-1.5 transition disabled:opacity-50 ${
+                        className={`inline-flex items-center gap-1 rounded-full border text-xs font-semibold px-2.5 py-1.5 transition disabled:opacity-50 ${
                           item.destacado
                             ? "border-[var(--color-naranja)] text-[var(--color-naranja)]"
                             : "border-[var(--color-linea)] text-[var(--color-tinta)] hover:border-[var(--color-naranja)] hover:text-[var(--color-naranja)]"

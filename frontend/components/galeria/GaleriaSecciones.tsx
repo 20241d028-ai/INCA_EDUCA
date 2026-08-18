@@ -5,6 +5,7 @@ import { listarGaleria } from "@/lib/api";
 import { CARRUSELES_GALERIA, DESTACADOS_GALERIA, type GaleriaItem } from "@/lib/galeria";
 import GaleriaCarrusel from "@/components/galeria/GaleriaCarrusel";
 import GaleriaLightbox from "@/components/galeria/GaleriaLightbox";
+import FadeIn from "@/components/ui/FadeIn";
 
 interface SeccionAbierta {
   fotos: GaleriaItem[];
@@ -51,31 +52,31 @@ export default function GaleriaSecciones() {
           .filter((it) => it.categoria === carrusel.categoria)
           .sort((a, b) => a.orden - b.orden || +new Date(b.fechaSubida) - +new Date(a.fechaSubida));
 
-        const esGraduaciones = carrusel.categoria === "talleres_practicas";
-
         return (
-          <div key={carrusel.categoria} className={i % 2 === 1 ? "bg-white" : undefined}>
+          <FadeIn key={carrusel.categoria} className={i % 2 === 1 ? "bg-white" : undefined}>
             <GaleriaCarrusel
               titulo={carrusel.titulo}
               descripcion={carrusel.descripcion}
               fotos={fotos}
-              variante={esGraduaciones ? "featured" : "grid"}
+              variante="grid"
               onAbrir={(indice) => setSeccionAbierta({ fotos, indice })}
             />
-          </div>
+          </FadeIn>
         );
       })}
 
-      <div className={CARRUSELES_GALERIA.length % 2 === 1 ? "bg-white" : undefined}>
-        <GaleriaCarrusel
-          titulo={DESTACADOS_GALERIA.titulo}
-          descripcion={DESTACADOS_GALERIA.descripcion}
-          fotos={destacados}
-          variante="featured"
-          autoPlay
-          onAbrir={(indice) => setSeccionAbierta({ fotos: destacados, indice })}
-        />
-      </div>
+      {destacados.length > 0 && (
+        <FadeIn className={CARRUSELES_GALERIA.length % 2 === 1 ? "bg-white" : undefined}>
+          <GaleriaCarrusel
+            titulo={DESTACADOS_GALERIA.titulo}
+            descripcion={DESTACADOS_GALERIA.descripcion}
+            fotos={destacados}
+            variante="featured"
+            autoPlay
+            onAbrir={(indice) => setSeccionAbierta({ fotos: destacados, indice })}
+          />
+        </FadeIn>
+      )}
 
       {seccionAbierta && (
         <GaleriaLightbox

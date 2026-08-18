@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
-import { Baloo_2, Nunito_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ChatWidget from "@/components/chat/ChatWidget";
 
 
-const baloo = Baloo_2({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["500", "700", "800"],
-  variable: "--font-baloo",
-});
-
-const nunito = Nunito_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-nunito",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${baloo.variable} ${nunito.variable}`}>
+    <html lang="es" className={jakarta.variable}>
       <body className="antialiased">
         <Header />
         {children}

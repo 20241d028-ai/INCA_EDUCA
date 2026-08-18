@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
               <div className="w-12 h-12 rounded-xl bg-[var(--color-verde)]/10 text-[var(--color-verde)] flex items-center justify-center transition-colors duration-200 group-hover:bg-[var(--color-naranja)] group-hover:text-white">
                 <Icono className="w-6 h-6" />
               </div>
-              <h2 className="mt-4 font-titulo font-extrabold text-lg text-[var(--color-verde-oscuro)]">
+              <h2 className="mt-4 font-titulo font-semibold text-lg text-[var(--color-verde-oscuro)]">
                 {s.titulo}
               </h2>
               <p className="mt-1.5 text-sm text-[var(--color-tinta)]/70 leading-relaxed">
