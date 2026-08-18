@@ -1,6 +1,6 @@
 /**
  * Script temporal para generar un JWT de prueba y poder probar en el
- * frontend las rutas protegidas (subir/eliminar galería, notificaciones)
+ * frontend las rutas protegidas (subir/eliminar galería)
  * mientras el módulo de login real (rama-cristhian) no está fusionado.
  *
  * No toca nada de rama-cristhian: usa el mismo middleware/auth.ts que ya

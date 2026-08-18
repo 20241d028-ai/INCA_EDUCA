@@ -79,11 +79,21 @@ export async function postEscalar(req: Request, res: Response) {
 }
 
 export async function getConversaciones(_req: Request, res: Response) {
-  res.json(await listarConversaciones());
+  try {
+    res.json(await listarConversaciones());
+  } catch (error) {
+    console.error("Error al listar conversaciones:", error);
+    res.status(500).json({ error: "No se pudieron cargar las conversaciones" });
+  }
 }
 
 export async function getConversacionPorId(req: Request<{ id: string }>, res: Response) {
-  const conversacion = await obtenerConversacion(req.params.id);
-  if (!conversacion) return res.status(404).json({ error: "Conversación no encontrada" });
-  res.json(conversacion);
+  try {
+    const conversacion = await obtenerConversacion(req.params.id);
+    if (!conversacion) return res.status(404).json({ error: "Conversación no encontrada" });
+    res.json(conversacion);
+  } catch (error) {
+    console.error("Error al obtener conversación:", error);
+    res.status(500).json({ error: "No se pudo cargar la conversación" });
+  }
 }

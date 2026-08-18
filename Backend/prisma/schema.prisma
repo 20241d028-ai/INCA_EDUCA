@@ -151,38 +151,35 @@ enum TipoGaleria {
   video
 }
 
+// Categoría institucional de la publicación (para el filtro de la galería
+// pública). Opcional/nullable a propósito: las filas ya existentes no tienen
+// categoría asignada todavía y no deben romperse con esta migración.
+enum CategoriaGaleria {
+  actividades_academicas
+  talleres_practicas
+  eventos_institucionales
+  nuestros_espacios
+}
+
 model Galeria {
-  id            String       @id @default(uuid())
+  id            String            @id @default(uuid())
   tipo          TipoGaleria
+  categoria     CategoriaGaleria?
   url           String
   titulo        String
   evento        String
-  adminId       String       @map("admin_id")
-  admin         Admin        @relation(fields: [adminId], references: [id])
-  fechaSubida   DateTime     @default(now()) @map("fecha_subida")
+  // Controla si aparece en la Galería pública (sin borrar el registro).
+  activo        Boolean           @default(true)
+  // Aparece en el carrusel "Momentos que quedan" de la Galería pública.
+  destacado     Boolean           @default(false)
+  // Orden manual dentro de su carrusel (menor = primero). Los registros
+  // existentes quedan en 0 y se ordenan luego por fecha de subida.
+  orden         Int               @default(0)
+  adminId       String            @map("admin_id")
+  admin         Admin             @relation(fields: [adminId], references: [id])
+  fechaSubida   DateTime          @default(now()) @map("fecha_subida")
 
   @@map("galeria")
-}
-
-// ---------------------------------------------------------------------------
-// NOTIFICACIONES — bandeja de notificaciones del panel admin
-// ---------------------------------------------------------------------------
-enum TipoNotificacion {
-  nuevo_postulante
-  escalamiento
-}
-
-model Notificacion {
-  id             String            @id @default(uuid())
-  tipo           TipoNotificacion
-  referenciaId   String            @map("referencia_id")
-  mensaje        String
-  leido          Boolean           @default(false)
-  adminId        String?           @map("admin_id")
-  admin          Admin?            @relation(fields: [adminId], references: [id])
-  fechaCreacion  DateTime          @default(now()) @map("fecha_creacion")
-
-  @@map("notificaciones")
 }
 
 // ---------------------------------------------------------------------------
@@ -197,7 +194,6 @@ model Admin {
 
   seguimientos   Seguimiento[]
   galeria        Galeria[]
-  notificaciones Notificacion[]
 
   @@map("admins")
 }

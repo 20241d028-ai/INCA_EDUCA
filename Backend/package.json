@@ -29,7 +29,11 @@
     "@types/multer": "^2.2.0",
     "@types/node": "^22.20.1",
     "prisma": "6.19.3",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "5.7"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

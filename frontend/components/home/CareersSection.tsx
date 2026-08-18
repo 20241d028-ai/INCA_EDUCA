@@ -1,4 +1,4 @@
-import Link from "next/link";
+import CarrerasGrid from "@/components/carreras/CarrerasGrid";
 
 interface Carrera {
   id: string;
@@ -19,30 +19,8 @@ export default function CareersSection({ carreras }: { carreras: Carrera[] }) {
         Elige una de nuestras carreras técnicas con formación práctica orientada al mercado laboral.
       </p>
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {carreras.map((c) => (
-          <Link
-            key={c.id}
-            href={`/carreras/${c.slug}`}
-            className="group flex rounded-3xl border border-[var(--color-linea)] overflow-hidden hover:shadow-lg transition"
-          >
-            <div
-              className="w-40 flex-shrink-0 bg-cover bg-center bg-[var(--color-linea)]"
-              style={{ backgroundImage: `url('${c.imagenUrl || `/carreras/${c.slug}.jpg`}')` }}
-            />
-            <div className="p-5">
-              <h3 className="font-titulo font-bold text-lg text-[var(--color-tinta)]">
-                {c.nombre}
-              </h3>
-              <p className="mt-1 text-sm text-[var(--color-tinta)]/70">
-                {c.descripcionCorta || `Duración: ${c.duracionMeses} meses`}
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-naranja)] group-hover:underline">
-                Ver detalles →
-              </span>
-            </div>
-          </Link>
-        ))}
+      <div className="mt-10">
+        <CarrerasGrid carreras={carreras} />
       </div>
     </section>
   );
