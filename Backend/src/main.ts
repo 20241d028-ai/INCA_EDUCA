@@ -8,6 +8,7 @@ import chatRoutes from "./modules/chat/routes";
 import webhooksRoutes from "./modules/webhooks/routes";
 import whatsappRoutes from "./modules/whatsapp/routes";
 import galeriaRoutes from "./modules/galeria/routes";
+import contactoRoutes from "./modules/contacto/routes";
 
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/carreras", carrerasRoutes);
 app.use("/api/galeria", galeriaRoutes);
+app.use("/api/contacto", contactoRoutes);
 
 // Red de seguridad: si cualquier ruta lanza un error no capturado, responder
 // siempre en JSON (nunca la página HTML de error por defecto de Express),

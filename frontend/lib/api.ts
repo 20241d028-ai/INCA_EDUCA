@@ -59,6 +59,25 @@ export async function crearPostulante(payload: {
   return res.json();
 }
 
+export async function enviarConsultaContacto(payload: {
+  nombre: string;
+  correo: string;
+  telefono: string;
+  motivo: string;
+  mensaje: string;
+}) {
+  const res = await fetch(`${API_URL}/api/contacto`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}) as { error?: string });
+    throw new Error(err.error || "No se pudo enviar tu mensaje");
+  }
+  return res.json();
+}
+
 export async function escalarConversacion(postulanteId: string, historial: MensajeChat[]) {
   const res = await fetch(`${API_URL}/api/chat/escalar`, {
     method: "POST",

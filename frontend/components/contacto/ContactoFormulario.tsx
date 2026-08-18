@@ -4,6 +4,7 @@ import { useState } from "react";
 import FadeIn from "@/components/ui/FadeIn";
 import { IconCheck, IconSend } from "@/components/ui/Icons";
 import { MOTIVOS_CONSULTA, type MotivoConsulta } from "@/lib/contacto";
+import { enviarConsultaContacto } from "@/lib/api";
 
 interface Errores {
   nombre?: string;
@@ -27,6 +28,7 @@ export default function ContactoFormulario() {
   const [errores, setErrores] = useState<Errores>({});
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [errorEnvio, setErrorEnvio] = useState("");
 
   function validar(): Errores {
     const nuevosErrores: Errores = {};
@@ -61,17 +63,27 @@ export default function ContactoFormulario() {
     setErrores(nuevosErrores);
     if (Object.keys(nuevosErrores).length > 0) return;
 
+    setErrorEnvio("");
     setEnviando(true);
 
-    // TODO(backend): esta sección todavía no tiene un endpoint de contacto.
-    // Cuando exista (ver el patrón de crearPostulante en lib/api.ts), reemplazar
-    // este bloque por la llamada real, por ejemplo:
-    //   await enviarConsultaContacto({ nombre, correo, telefono, motivo, mensaje });
-    // Los datos ya están validados y listos para enviarse tal cual.
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    setEnviando(false);
-    setEnviado(true);
+    try {
+      await enviarConsultaContacto({
+        nombre: nombre.trim(),
+        correo: correo.trim(),
+        telefono: telefono.trim(),
+        motivo,
+        mensaje: mensaje.trim(),
+      });
+      setEnviado(true);
+    } catch (error) {
+      setErrorEnvio(
+        error instanceof Error
+          ? error.message
+          : "No se pudo enviar tu mensaje. Intenta nuevamente."
+      );
+    } finally {
+      setEnviando(false);
+    }
   }
 
   if (enviado) {
@@ -213,6 +225,9 @@ export default function ContactoFormulario() {
             </div>
 
             <div className="sm:col-span-2">
+              {errorEnvio && (
+                <p className="mb-3 text-sm text-red-600">{errorEnvio}</p>
+              )}
               <button
                 type="submit"
                 disabled={enviando}

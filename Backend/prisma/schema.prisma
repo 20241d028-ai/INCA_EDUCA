@@ -183,6 +183,29 @@ model Galeria {
 }
 
 // ---------------------------------------------------------------------------
+// CONTACTOS — mensajes enviados desde el formulario público de /contacto
+// ---------------------------------------------------------------------------
+enum EstadoContacto {
+  nuevo
+  atendido
+}
+
+model Contacto {
+  id          String          @id @default(uuid())
+  nombre      String
+  correo      String
+  telefono    String          @db.VarChar(9)
+  // Texto libre proveniente de MOTIVOS_CONSULTA en frontend/lib/contacto.ts
+  // (no es un enum a propósito: son etiquetas de UI en español, no códigos).
+  motivo      String
+  mensaje     String          @db.Text
+  estado      EstadoContacto  @default(nuevo)
+  creadoEn    DateTime        @default(now()) @map("creado_en")
+
+  @@map("contactos")
+}
+
+// ---------------------------------------------------------------------------
 // ADMINS — único rol administrativo (admin = asesor)
 // ---------------------------------------------------------------------------
 model Admin {
