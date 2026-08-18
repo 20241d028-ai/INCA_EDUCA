@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
     try {
       const { token } = await loginAdmin(email, password);
       localStorage.setItem("admin_token", token);
-      router.push("/admin/conversaciones");
+      router.push("/admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     } finally {
@@ -27,32 +27,44 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: 320, margin: "80px auto", fontFamily: "sans-serif" }}>
-      <h1>Login Admin</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 10 }}>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-fondo)] px-6">
+      <div className="w-full max-w-sm bg-white rounded-2xl border border-[var(--color-linea)] shadow-sm p-8">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-tinta)]/40">
+          Panel administrativo
+        </p>
+        <h1 className="font-titulo text-2xl font-extrabold text-[var(--color-verde-oscuro)]">
+          INCA EDUCA
+        </h1>
+
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
+            required
+            className="w-full rounded-xl border border-[var(--color-linea)] px-4 py-2.5 text-sm outline-none transition focus:border-[var(--color-naranja)] focus:ring-2 focus:ring-[var(--color-naranja)]/20"
           />
-        </div>
-        <div style={{ marginBottom: 10 }}>
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
+            required
+            className="w-full rounded-xl border border-[var(--color-linea)] px-4 py-2.5 text-sm outline-none transition focus:border-[var(--color-naranja)] focus:ring-2 focus:ring-[var(--color-naranja)]/20"
           />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" disabled={cargando} style={{ width: "100%", padding: 10 }}>
-          {cargando ? "Ingresando..." : "Ingresar"}
-        </button>
-      </form>
+
+          {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={cargando}
+            className="mt-2 w-full rounded-full bg-[var(--color-naranja)] text-white font-bold py-2.5 transition hover:brightness-95 disabled:opacity-60"
+          >
+            {cargando ? "Ingresando..." : "Ingresar"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

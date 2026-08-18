@@ -20,3 +20,10 @@ Subidan8n/
 # Llaves SSH por si acaso quedan sueltas
 *.key
 *.pem
+
+# Compilados de TypeScript del backend (se generan con tsc, no deben subirse)
+Backend/src/**/*.js
+Backend/prisma/*.js
+
+# Entorno virtual de Python
+Backend/stt-service/venv/

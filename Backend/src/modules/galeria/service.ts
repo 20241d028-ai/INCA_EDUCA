@@ -1,5 +1,5 @@
 import { prisma } from "../../prisma";
-import { TipoGaleria } from "@prisma/client";
+import { TipoGaleria, CategoriaGaleria } from "@prisma/client";
 import cloudinary from "../../lib/cloudinary";
 
 interface SubirArchivoInput {
@@ -21,9 +21,12 @@ export async function subirACloudinary({ buffer, mimetype, tipo }: SubirArchivoI
 
 interface CrearGaleriaInput {
   tipo: TipoGaleria;
+  categoria?: CategoriaGaleria;
   url: string;
   titulo: string;
   evento: string;
+  destacado?: boolean;
+  orden?: number;
   adminId: string;
 }
 
@@ -31,15 +34,44 @@ export async function crearGaleria(data: CrearGaleriaInput) {
   return prisma.galeria.create({ data });
 }
 
-export async function listarGaleria(tipo?: TipoGaleria) {
+interface ListarGaleriaFiltros {
+  tipo?: TipoGaleria;
+  categoria?: CategoriaGaleria;
+  soloActivos?: boolean;
+  soloDestacados?: boolean;
+}
+
+export async function listarGaleria(filtros: ListarGaleriaFiltros = {}) {
+  const { tipo, categoria, soloActivos = true, soloDestacados = false } = filtros;
   return prisma.galeria.findMany({
-    where: tipo ? { tipo } : undefined,
-    orderBy: { fechaSubida: "desc" },
+    where: {
+      ...(tipo ? { tipo } : {}),
+      ...(categoria ? { categoria } : {}),
+      ...(soloActivos ? { activo: true } : {}),
+      ...(soloDestacados ? { destacado: true } : {}),
+    },
+    orderBy: [{ orden: "asc" }, { fechaSubida: "desc" }],
   });
 }
 
 export async function obtenerGaleriaPorId(id: string) {
   return prisma.galeria.findUnique({ where: { id } });
+}
+
+interface ActualizarGaleriaInput {
+  titulo?: string;
+  evento?: string;
+  categoria?: CategoriaGaleria | null;
+  activo?: boolean;
+  destacado?: boolean;
+  orden?: number;
+}
+
+export async function actualizarGaleria(id: string, data: ActualizarGaleriaInput) {
+  const existente = await prisma.galeria.findUnique({ where: { id } });
+  if (!existente) return null;
+
+  return prisma.galeria.update({ where: { id }, data });
 }
 
 export async function eliminarGaleria(id: string) {

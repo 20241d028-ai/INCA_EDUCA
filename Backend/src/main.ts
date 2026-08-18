@@ -7,7 +7,6 @@ import authRoutes from "./modules/auth/routes";
 import chatRoutes from "./modules/chat/routes";
 import webhooksRoutes from "./modules/webhooks/routes";
 import whatsappRoutes from "./modules/whatsapp/routes";
-import notificacionesRoutes from "./modules/notificaciones/routes";
 import galeriaRoutes from "./modules/galeria/routes";
 
 
@@ -30,8 +29,15 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/carreras", carrerasRoutes);
-app.use("/api/notificaciones", notificacionesRoutes);
 app.use("/api/galeria", galeriaRoutes);
+
+// Red de seguridad: si cualquier ruta lanza un error no capturado, responder
+// siempre en JSON (nunca la página HTML de error por defecto de Express),
+// para que el frontend pueda leer el mensaje en vez de fallar al parsear.
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error("Error no manejado:", err);
+  res.status(500).json({ error: "Error interno del servidor" });
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
