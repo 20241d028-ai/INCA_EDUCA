@@ -3,6 +3,7 @@ import {
   crearContacto,
   listarContactos,
   actualizarEstadoContacto,
+  listarPendientesRecordatorioContacto,
   EstadoContacto,
 } from "./service";
 
@@ -78,4 +79,13 @@ export async function patchEstadoContacto(req: Request<{ id: string }>, res: Res
     return res.status(404).json({ error: "Contacto no encontrado" });
   }
   res.json(contacto);
+}
+
+export async function getPendientesRecordatorioContacto(req: Request, res: Response) {
+  const secretoRecibido = req.headers["x-webhook-secret"];
+  if (secretoRecibido !== process.env.N8N_WEBHOOK_SECRET) {
+    return res.status(401).json({ error: "Secreto de webhook inválido" });
+  }
+  const pendientes = await listarPendientesRecordatorioContacto();
+  res.json(pendientes);
 }

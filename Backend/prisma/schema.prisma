@@ -121,8 +121,10 @@ enum EstadoSeguimiento {
 
 model Seguimiento {
   id             String             @id @default(uuid())
-  postulanteId   String             @map("postulante_id")
-  postulante     Postulante         @relation(fields: [postulanteId], references: [id])
+  postulanteId   String?            @map("postulante_id")
+  postulante     Postulante?        @relation(fields: [postulanteId], references: [id])
+  contactoId     String?            @map("contacto_id")
+  contacto       Contacto?          @relation(fields: [contactoId], references: [id])
   adminId        String?            @map("admin_id")
   admin          Admin?             @relation(fields: [adminId], references: [id])
   canal          CanalSeguimiento
@@ -195,12 +197,12 @@ model Contacto {
   nombre      String
   correo      String
   telefono    String          @db.VarChar(9)
-  // Texto libre proveniente de MOTIVOS_CONSULTA en frontend/lib/contacto.ts
-  // (no es un enum a propósito: son etiquetas de UI en español, no códigos).
   motivo      String
   mensaje     String          @db.Text
   estado      EstadoContacto  @default(nuevo)
   creadoEn    DateTime        @default(now()) @map("creado_en")
+
+  seguimientos Seguimiento[]
 
   @@map("contactos")
 }

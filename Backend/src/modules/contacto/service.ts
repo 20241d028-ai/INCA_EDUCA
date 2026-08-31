@@ -10,6 +10,11 @@ import { prisma } from "../../prisma";
 // frente a inyección SQL y funciona igual contra la tabla "contactos" una
 // vez aplicada la migración. Cuando se regenere el cliente, se puede migrar
 // este archivo a la API tipada de Prisma si se prefiere.
+//
+// Actualización: el cliente ya fue regenerado (31/ago) para soportar la
+// relación Seguimiento <-> Contacto. listarPendientesRecordatorioContacto()
+// usa la API tipada; el resto del archivo se deja con $queryRaw por ahora
+// para no arriesgar el flujo que ya está en producción.
 
 export type EstadoContacto = "nuevo" | "atendido";
 
@@ -69,4 +74,40 @@ export async function actualizarEstadoContacto(
     RETURNING id, nombre, correo, telefono, motivo, mensaje, estado, creado_en AS "creadoEn"
   `);
   return filas[0] ?? null;
+}
+
+export async function listarPendientesRecordatorioContacto() {
+  const UMBRAL_DIAS = [2, 5, 10]; // día en que corresponde el recordatorio N (índice 0 = recordatorio 1)
+  const MAX_RECORDATORIOS = 3;
+
+  const candidatos = await prisma.contacto.findMany({
+    where: { estado: "nuevo" },
+    include: {
+      seguimientos: { where: { canal: "whatsapp" }, orderBy: { fechaEnvio: "asc" } },
+    },
+  });
+
+  const ahora = new Date();
+
+  return candidatos
+    .map((c) => {
+      const recordatoriosEnviados = Math.max(c.seguimientos.length - 1, 0);
+      if (recordatoriosEnviados >= MAX_RECORDATORIOS) return null;
+
+      const diasTranscurridos = Math.floor(
+        (ahora.getTime() - c.creadoEn.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      const diasRequeridos = UMBRAL_DIAS[recordatoriosEnviados];
+
+      if (diasTranscurridos < diasRequeridos) return null;
+
+      return {
+        contactoId: c.id,
+        nombre: c.nombre,
+        telefono: c.telefono,
+        motivo: c.motivo,
+        numeroRecordatorio: recordatoriosEnviados + 1,
+      };
+    })
+    .filter((x) => x !== null);
 }
