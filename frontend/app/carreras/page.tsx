@@ -8,8 +8,21 @@ import FinalCtaSection from "@/components/carreras/FinalCtaSection";
 import Swoosh from "@/components/ui/Swoosh";
 import { listarCarreras } from "@/lib/api";
 
+// Renderiza en cada request en vez de intentar generar HTML estático en el
+// build. Así, si el backend está temporalmente caído durante un deploy de
+// Vercel, el build no falla — solo esta página se ve afectada, y en cuanto
+// el backend vuelve, la página funciona sola sin necesitar un nuevo deploy.
+export const dynamic = "force-dynamic";
+
 export default async function CarrerasPage() {
-  const carreras = await listarCarreras();
+  let carreras: Awaited<ReturnType<typeof listarCarreras>> = [];
+  let errorCarga = false;
+
+  try {
+    carreras = await listarCarreras();
+  } catch {
+    errorCarga = true;
+  }
 
   return (
     <main id="carreras" className="pt-24">
@@ -28,7 +41,13 @@ export default async function CarrerasPage() {
           </p>
 
           <div className="mt-10">
-            <CarrerasGrid carreras={carreras} />
+            {errorCarga ? (
+              <p className="text-[var(--color-tinta)]/70">
+                No pudimos cargar las carreras en este momento. Por favor, actualiza la página o vuelve a intentarlo en unos minutos.
+              </p>
+            ) : (
+              <CarrerasGrid carreras={carreras} />
+            )}
           </div>
         </div>
 

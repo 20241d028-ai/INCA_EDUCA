@@ -24,6 +24,11 @@ export interface MensajeChat {
   contenido: string;
 }
 
+export interface AccionNavegacion {
+  tipo: "navegar";
+  destino: string;
+}
+
 export async function enviarMensajeAgente(historial: MensajeChat[]) {
   const res = await fetch(`${API_URL}/api/chat/mensaje`, {
     method: "POST",
@@ -32,7 +37,10 @@ export async function enviarMensajeAgente(historial: MensajeChat[]) {
   });
   if (!res.ok) throw new Error("No se pudo obtener respuesta del agente");
   const data = await res.json();
-  return data.respuesta as string;
+  return {
+    respuesta: data.respuesta as string,
+    accion: (data.accion as AccionNavegacion | null) ?? null,
+  };
 }
 
 export async function crearPostulante(payload: {

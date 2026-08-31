@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   enviarMensajeAgente,
   enviarMensajeAudio,
@@ -30,6 +31,7 @@ function formatearTiempo(segundos: number) {
 }
 
 export default function ChatWidget() {
+  const router = useRouter();
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<Mensaje[]>([
     {
@@ -54,6 +56,13 @@ export default function ChatWidget() {
     finRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes, mostrarFormAsesor, previewUrl]);
 
+  // Prefijos de ruta que el chatbot puede ofrecer como destino de navegación.
+  // Si Gemini devolviera algo fuera de esta lista, se ignora por seguridad.
+  function esDestinoValido(destino: string) {
+    const rutasExactas = ["/carreras", "/galeria", "/contacto", "/admision", "/nosotros"];
+    return destino.startsWith("/carreras/") || rutasExactas.includes(destino);
+  }
+
   async function enviarMensaje() {
     if (!input.trim() || cargando) return;
     const nuevoHistorial: Mensaje[] = [
@@ -65,8 +74,11 @@ export default function ChatWidget() {
     setCargando(true);
 
     try {
-      const respuesta = await enviarMensajeAgente(nuevoHistorial);
+      const { respuesta, accion } = await enviarMensajeAgente(nuevoHistorial);
       setMensajes((prev) => [...prev, { remitente: "agente", contenido: respuesta }]);
+      if (accion?.tipo === "navegar" && esDestinoValido(accion.destino)) {
+        router.push(accion.destino);
+      }
     } catch {
       setMensajes((prev) => [
         ...prev,
