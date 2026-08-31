@@ -151,38 +151,58 @@ enum TipoGaleria {
   video
 }
 
+// Categoría institucional de la publicación (para el filtro de la galería
+// pública). Opcional/nullable a propósito: las filas ya existentes no tienen
+// categoría asignada todavía y no deben romperse con esta migración.
+enum CategoriaGaleria {
+  actividades_academicas
+  talleres_practicas
+  eventos_institucionales
+  nuestros_espacios
+}
+
 model Galeria {
-  id            String       @id @default(uuid())
+  id            String            @id @default(uuid())
   tipo          TipoGaleria
+  categoria     CategoriaGaleria?
   url           String
   titulo        String
   evento        String
-  adminId       String       @map("admin_id")
-  admin         Admin        @relation(fields: [adminId], references: [id])
-  fechaSubida   DateTime     @default(now()) @map("fecha_subida")
+  // Controla si aparece en la Galería pública (sin borrar el registro).
+  activo        Boolean           @default(true)
+  // Aparece en el carrusel "Momentos que quedan" de la Galería pública.
+  destacado     Boolean           @default(false)
+  // Orden manual dentro de su carrusel (menor = primero). Los registros
+  // existentes quedan en 0 y se ordenan luego por fecha de subida.
+  orden         Int               @default(0)
+  adminId       String            @map("admin_id")
+  admin         Admin             @relation(fields: [adminId], references: [id])
+  fechaSubida   DateTime          @default(now()) @map("fecha_subida")
 
   @@map("galeria")
 }
 
 // ---------------------------------------------------------------------------
-// NOTIFICACIONES — bandeja de notificaciones del panel admin
+// CONTACTOS — mensajes enviados desde el formulario público de /contacto
 // ---------------------------------------------------------------------------
-enum TipoNotificacion {
-  nuevo_postulante
-  escalamiento
+enum EstadoContacto {
+  nuevo
+  atendido
 }
 
-model Notificacion {
-  id             String            @id @default(uuid())
-  tipo           TipoNotificacion
-  referenciaId   String            @map("referencia_id")
-  mensaje        String
-  leido          Boolean           @default(false)
-  adminId        String?           @map("admin_id")
-  admin          Admin?            @relation(fields: [adminId], references: [id])
-  fechaCreacion  DateTime          @default(now()) @map("fecha_creacion")
+model Contacto {
+  id          String          @id @default(uuid())
+  nombre      String
+  correo      String
+  telefono    String          @db.VarChar(9)
+  // Texto libre proveniente de MOTIVOS_CONSULTA en frontend/lib/contacto.ts
+  // (no es un enum a propósito: son etiquetas de UI en español, no códigos).
+  motivo      String
+  mensaje     String          @db.Text
+  estado      EstadoContacto  @default(nuevo)
+  creadoEn    DateTime        @default(now()) @map("creado_en")
 
-  @@map("notificaciones")
+  @@map("contactos")
 }
 
 // ---------------------------------------------------------------------------
@@ -197,7 +217,6 @@ model Admin {
 
   seguimientos   Seguimiento[]
   galeria        Galeria[]
-  notificaciones Notificacion[]
 
   @@map("admins")
 }
