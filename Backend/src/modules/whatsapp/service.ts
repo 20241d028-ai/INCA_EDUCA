@@ -27,7 +27,7 @@ export async function procesarMensajeWhatsapp(telefono: string, textoUsuario: st
 
   historial.push({ remitente: "postulante", contenido: textoUsuario });
 
-  const respuesta = await generarRespuestaAgente(historial, "whatsapp");
+  const { respuesta } = await generarRespuestaAgente(historial, "whatsapp");
 
   historial.push({ remitente: "agente", contenido: respuesta });
 
