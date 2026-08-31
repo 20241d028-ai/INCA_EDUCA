@@ -20,3 +20,6 @@ Subidan8n/
 # Llaves SSH por si acaso quedan sueltas
 *.key
 *.pem
+# Llaves de infraestructura
+llaves-masRam/
+oracle-audio-keys/

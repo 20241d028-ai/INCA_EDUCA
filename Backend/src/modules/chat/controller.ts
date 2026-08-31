@@ -41,7 +41,8 @@ export async function postMensajeAudio(req: Request, res: Response) {
   try {
     const formData = new FormData();
     const audioBlob = new Blob([new Uint8Array(req.file.buffer)], { type: req.file.mimetype });
-    formData.append("audio", audioBlob, "audio.webm");
+    const extensionAudio = req.file.mimetype.includes("mp4") ? "mp4" : "webm";
+    formData.append("audio", audioBlob, `audio.${extensionAudio}`);
 
     const sttResponse = await fetch(`${process.env.STT_SERVICE_URL}/transcribir`, {
       method: "POST",
