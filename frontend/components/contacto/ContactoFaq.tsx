@@ -35,16 +35,16 @@ export default function ContactoFaq() {
   const [abierta, setAbierta] = useState<number | null>(0);
 
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
+    <section className="bg-white py-24">
+      <div className="max-w-4xl mx-auto px-6">
+        <h2 className="font-titulo text-4xl md:text-5xl font-bold text-[var(--color-verde-oscuro)] text-center">
           Preguntas frecuentes
         </h2>
-        <p className="mt-3 text-[var(--color-tinta)]/70 text-center">
+        <p className="mt-4 text-lg text-[var(--color-tinta)]/70 text-center">
           ¿Tienes dudas? Aquí respondemos las más comunes.
         </p>
 
-        <div className="mt-10 flex flex-col gap-3">
+        <div className="mt-12 flex flex-col gap-4">
           {PREGUNTAS.map((item, i) => {
             const estaAbierta = abierta === i;
             return (
@@ -56,13 +56,13 @@ export default function ContactoFaq() {
                   type="button"
                   onClick={() => setAbierta(estaAbierta ? null : i)}
                   aria-expanded={estaAbierta}
-                  className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 sm:px-6 sm:py-5"
+                  className="w-full flex items-center justify-between gap-4 text-left px-6 py-5 sm:px-8 sm:py-6"
                 >
-                  <span className="font-titulo font-bold text-[var(--color-tinta)]">
+                  <span className="font-titulo font-bold text-lg text-[var(--color-tinta)]">
                     {item.pregunta}
                   </span>
                   <IconChevronDown
-                    className={`w-5 h-5 flex-shrink-0 text-[var(--color-naranja)] transition-transform duration-300 ${
+                    className={`w-6 h-6 flex-shrink-0 text-[var(--color-naranja)] transition-transform duration-300 ${
                       estaAbierta ? "rotate-180" : ""
                     }`}
                   />
@@ -74,7 +74,7 @@ export default function ContactoFaq() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="px-5 pb-5 sm:px-6 sm:pb-6 text-sm text-[var(--color-tinta)]/70 leading-relaxed">
+                    <p className="px-6 pb-6 sm:px-8 sm:pb-8 text-base text-[var(--color-tinta)]/70 leading-relaxed">
                       {item.respuesta}
                     </p>
                   </div>

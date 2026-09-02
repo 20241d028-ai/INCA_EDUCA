@@ -45,21 +45,21 @@ function IndicadorHorario() {
 
 export default function ContactoUbicacion() {
   return (
-    <section id="ubicacion" className="bg-[var(--color-fondo)] py-20 scroll-mt-24">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="ubicacion" className="bg-[var(--color-fondo)] py-24 md:py-28 scroll-mt-24">
+      <div className="max-w-[1400px] mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
+          <h2 className="font-titulo text-4xl md:text-5xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Encuéntranos
           </h2>
         </FadeIn>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch">
           <FadeIn delay={100} className="h-full">
-            <div className="h-full min-h-[320px] rounded-3xl overflow-hidden border border-[var(--color-linea)] shadow-sm">
+            <div className="h-full min-h-[440px] md:min-h-[560px] rounded-3xl overflow-hidden border border-[var(--color-linea)] shadow-sm">
               <iframe
                 title="Ubicación de INCA EDUCA"
                 src={MAPA_EMBED_URL}
-                className="w-full h-full min-h-[320px]"
+                className="w-full h-full min-h-[440px] md:min-h-[560px]"
                 style={{ border: 0 }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -68,30 +68,30 @@ export default function ContactoUbicacion() {
           </FadeIn>
 
           <FadeIn delay={200}>
-            <div className="h-full rounded-3xl bg-white border border-[var(--color-linea)] p-8 sm:p-10">
-              <h3 className="font-titulo text-2xl font-semibold text-[var(--color-verde-oscuro)]">
+            <div className="h-full rounded-3xl bg-white border border-[var(--color-linea)] p-10 sm:p-12">
+              <h3 className="font-titulo text-3xl font-semibold text-[var(--color-verde-oscuro)]">
                 INCA EDUCA
               </h3>
 
-              <div className="mt-6 space-y-5">
+              <div className="mt-8 space-y-6 text-lg">
                 <div className="flex items-start gap-3">
-                  <IconMapPin className="w-5 h-5 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
+                  <IconMapPin className="w-6 h-6 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
                   <p className="text-[var(--color-tinta)]/80 leading-relaxed">{DIRECCION}</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IconPhone className="w-5 h-5 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
+                  <IconPhone className="w-6 h-6 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
                   <a href={TELEFONO_TEL_HREF} className="text-[var(--color-tinta)]/80 hover:text-[var(--color-verde-oscuro)] transition-colors">
                     {TELEFONO}
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IconMail className="w-5 h-5 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
+                  <IconMail className="w-6 h-6 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
                   <a href={`mailto:${CORREO}`} className="text-[var(--color-tinta)]/80 hover:text-[var(--color-verde-oscuro)] transition-colors">
                     {CORREO}
                   </a>
                 </div>
                 <div className="flex items-start gap-3">
-                  <IconClock className="w-5 h-5 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
+                  <IconClock className="w-6 h-6 flex-shrink-0 mt-0.5 text-[var(--color-naranja)]" />
                   <div>
                     {HORARIO_ATENCION.map((h) => (
                       <p key={h.dias} className="text-[var(--color-tinta)]/80 leading-relaxed">
@@ -108,7 +108,7 @@ export default function ContactoUbicacion() {
                 href={MAPA_COMO_LLEGAR_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-8 rounded-full bg-[var(--color-verde-oscuro)] text-white font-semibold px-6 py-3 transition-all duration-300 ease-out hover:brightness-110 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 mt-10 rounded-full bg-[var(--color-verde-oscuro)] text-white font-semibold text-lg px-8 py-4 transition-all duration-300 ease-out hover:brightness-110 hover:-translate-y-0.5"
               >
                 Cómo llegar
                 <span aria-hidden="true">→</span>

@@ -5,7 +5,7 @@ export default function ContactoCtaFinal() {
   return (
     <section className="relative overflow-hidden">
       <div
-        className="relative bg-cover bg-center py-24 sm:py-28"
+        className="relative bg-cover bg-center py-28 sm:py-36"
         style={{ backgroundImage: "url('/banners/inti-raymi-inca-educa.webp')" }}
       >
         <div
@@ -16,14 +16,14 @@ export default function ContactoCtaFinal() {
           }}
         />
 
-        <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
-            <h2 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
+            <h2 className="font-titulo text-5xl sm:text-6xl font-extrabold text-white drop-shadow-lg">
               ¿Listo para dar el siguiente paso?
             </h2>
           </FadeIn>
           <FadeIn delay={100}>
-            <p className="mt-5 text-white/85 leading-relaxed max-w-xl mx-auto text-lg">
+            <p className="mt-6 text-white/85 leading-relaxed max-w-xl mx-auto text-xl">
               Tu futuro profesional comienza aquí.
             </p>
           </FadeIn>
@@ -32,13 +32,13 @@ export default function ContactoCtaFinal() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/carreras"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-semibold px-8 py-4 transition-all duration-300 ease-out hover:bg-white hover:text-[var(--color-verde-oscuro)]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-white text-white font-semibold text-lg px-9 py-5 transition-all duration-300 ease-out hover:bg-white hover:text-[var(--color-verde-oscuro)]"
               >
                 CONOCE NUESTRAS CARRERAS
               </Link>
               <Link
                 href="/admision"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-4 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold text-lg px-9 py-5 shadow-lg transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5"
               >
                 POSTULA AHORA
                 <span aria-hidden="true">→</span>

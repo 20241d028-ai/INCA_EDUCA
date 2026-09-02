@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ChatWidget from "@/components/chat/ChatWidget";
+import FloatingSocialButtons from "@/components/ui/FloatingSocialButtons";
 
 
 const jakarta = Plus_Jakarta_Sans({
@@ -30,6 +31,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <ChatWidget />
+        <FloatingSocialButtons />
 
       </body>
     </html>
