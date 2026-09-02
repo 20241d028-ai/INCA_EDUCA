@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { IconSend, IconMic, IconStop, IconTrash, IconX } from "@/components/ui/Icons";
+import { WHATSAPP_URL } from "@/lib/contacto";
 import {
   enviarMensajeAgente,
   enviarMensajeAudio,
@@ -187,14 +190,48 @@ export default function ChatWidget() {
 
   return (
     <>
+      {!abierto && (
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Escríbenos por WhatsApp"
+          title="Escríbenos por WhatsApp"
+          className="fixed bottom-24 right-6 z-50 h-[34px] w-[34px] rounded-full shadow-lg transition-transform duration-200 ease-out hover:scale-110"
+        >
+          <Image
+            src="/social/whatsapp.png"
+            alt="WhatsApp"
+            width={34}
+            height={34}
+            unoptimized
+            className="h-full w-full object-contain"
+          />
+        </a>
+      )}
+
       <button
         onClick={() => setAbierto((v) => !v)}
         aria-label={abierto ? "Cerrar chat" : "Abrir chat"}
-        className={`fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[var(--color-verde)] text-white shadow-lg items-center justify-center hover:brightness-95 transition ${
-          abierto ? "hidden sm:flex" : "flex"
+        title={abierto ? "Cerrar chat" : "Chat IA"}
+        className={`fixed bottom-6 right-6 z-50 shadow-lg transition-all duration-300 ease-out hover:brightness-95 ${
+          abierto
+            ? "hidden sm:flex h-14 w-14 rounded-full bg-[var(--color-verde-oscuro)] text-white items-center justify-center"
+            : "flex h-16 w-16 rounded-full overflow-hidden hover:scale-110 hover:-translate-y-0.5"
         }`}
       >
-        {abierto ? "✕" : "💬"}
+        {abierto ? (
+          <IconX className="w-5 h-5" />
+        ) : (
+          <Image
+            src="/chat/robot.gif"
+            alt="Chat IA"
+            width={64}
+            height={64}
+            unoptimized
+            className="h-full w-full object-contain"
+          />
+        )}
       </button>
 
       {abierto && (
@@ -209,7 +246,7 @@ export default function ChatWidget() {
               aria-label="Cerrar chat"
               className="sm:hidden flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
             >
-              ✕
+              <IconX className="w-4 h-4" />
             </button>
           </div>
 
@@ -270,7 +307,7 @@ export default function ChatWidget() {
                   aria-label="Descartar audio"
                   className="rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 bg-[var(--color-fondo)] text-[var(--color-tinta)]"
                 >
-                  🗑️
+                  <IconTrash className="w-4 h-4" />
                 </button>
                 <button
                   onClick={confirmarEnvioAudio}
@@ -278,7 +315,7 @@ export default function ChatWidget() {
                   aria-label="Enviar audio"
                   className="rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0 bg-[var(--color-verde)] text-white disabled:opacity-50"
                 >
-                  →
+                  <IconSend className="w-4 h-4" />
                 </button>
               </div>
             ) : (
@@ -304,19 +341,19 @@ export default function ChatWidget() {
                   onClick={grabando ? detenerGrabacion : iniciarGrabacion}
                   aria-label={grabando ? "Detener grabación" : "Grabar un audio"}
                   className={`rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 transition ${
-                    grabando ? "bg-red-500 text-white scale-110" : "bg-[var(--color-fondo)] text-[var(--color-tinta)]"
+                    grabando ? "bg-red-500 text-white scale-110" : "bg-[var(--color-verde)] text-white"
                   }`}
                 >
-                  {grabando ? "⏹️" : "🎤"}
+                  {grabando ? <IconStop className="w-4 h-4" /> : <IconMic className="w-4 h-4" />}
                 </button>
                 {!grabando && (
                   <button
                     onClick={enviarMensaje}
                     disabled={cargando}
-                    className="rounded-full bg-[var(--color-verde)] text-white w-10 h-10 flex items-center justify-center disabled:opacity-50 flex-shrink-0"
+                    className="rounded-full bg-[var(--color-naranja)] text-white w-10 h-10 flex items-center justify-center disabled:opacity-50 flex-shrink-0"
                     aria-label="Enviar mensaje"
                   >
-                    →
+                    <IconSend className="w-4 h-4" />
                   </button>
                 )}
               </div>

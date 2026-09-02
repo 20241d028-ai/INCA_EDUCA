@@ -6,11 +6,22 @@ import { WHATSAPP_URL } from "@/lib/contacto";
 
 export default function ContactoHero() {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-verde-oscuro)]">
-      <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-16 sm:pt-36 sm:pb-20 md:pt-40 md:pb-24 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-10 items-center">
-        <div>
+    <section className="relative overflow-hidden">
+      <div
+        className="relative min-h-screen flex items-center bg-cover bg-[center_30%]"
+        style={{ backgroundImage: "url('/hero/graduacion-inca-educa.jpg')" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(20,67,43,0.96) 0%, rgba(20,67,43,0.82) 40%, rgba(20,67,43,0.45) 72%, rgba(20,67,43,0.25) 100%)",
+          }}
+        />
+
+        <div className="relative w-full max-w-3xl mx-auto px-6 text-center">
           <FadeIn>
-            <h1 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+            <h1 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
               <span className="relative inline-block">
                 Contáctanos
                 <Swoosh className="absolute left-0 -bottom-2 w-full h-3" color="var(--color-naranja)" />
@@ -25,14 +36,14 @@ export default function ContactoHero() {
           </FadeIn>
 
           <FadeIn delay={200}>
-            <p className="mt-5 text-white/85 leading-relaxed max-w-md">
+            <p className="mt-5 text-white/85 leading-relaxed max-w-xl mx-auto">
               ¿Tienes dudas sobre nuestras carreras, admisión o matrícula? Nuestro
               equipo está listo para orientarte.
             </p>
           </FadeIn>
 
           <FadeIn delay={300}>
-            <div className="mt-9 flex flex-col sm:flex-row gap-4">
+            <div className="mt-9 flex flex-col sm:flex-row justify-center gap-4">
               <a
                 href={WHATSAPP_URL}
                 target="_blank"
@@ -52,22 +63,6 @@ export default function ContactoHero() {
             </div>
           </FadeIn>
         </div>
-
-        <FadeIn delay={150}>
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] md:aspect-[5/4]">
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url('/hero/imagen2.jpg')" }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(20,67,43,0.55) 0%, rgba(20,67,43,0) 45%)",
-              }}
-            />
-          </div>
-        </FadeIn>
       </div>
     </section>
   );

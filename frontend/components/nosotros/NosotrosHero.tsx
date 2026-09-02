@@ -6,7 +6,7 @@ export default function NosotrosHero() {
   return (
     <section className="relative overflow-hidden">
       <div
-        className="relative bg-cover bg-[center_25%] py-28 sm:py-36"
+        className="relative min-h-screen flex items-center bg-cover bg-[center_25%]"
         style={{ backgroundImage: "url('/hero-inca-educa.jpg')" }}
       >
         <div
@@ -17,7 +17,7 @@ export default function NosotrosHero() {
           }}
         />
 
-        <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <div className="relative w-full max-w-3xl mx-auto px-6 text-center">
           <FadeIn>
             <h1 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
               Conoce{" "}

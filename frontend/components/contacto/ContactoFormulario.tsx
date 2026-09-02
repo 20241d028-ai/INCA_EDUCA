@@ -88,17 +88,17 @@ export default function ContactoFormulario() {
 
   if (enviado) {
     return (
-      <section id="formulario" className="bg-white py-20 scroll-mt-24">
+      <section id="formulario" className="bg-white py-24 scroll-mt-24">
         <div className="max-w-2xl mx-auto px-6">
           <FadeIn>
-            <div className="rounded-3xl border border-[var(--color-linea)] bg-[var(--color-fondo)] px-8 py-14 text-center">
-              <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-verde)]/10 text-[var(--color-verde)] flex items-center justify-center">
-                <IconCheck className="w-9 h-9" />
+            <div className="rounded-3xl border border-[var(--color-linea)] bg-[var(--color-fondo)] px-10 py-16 text-center">
+              <div className="mx-auto w-20 h-20 rounded-full bg-[var(--color-verde)]/10 text-[var(--color-verde)] flex items-center justify-center">
+                <IconCheck className="w-10 h-10" />
               </div>
-              <h3 className="mt-6 font-titulo text-2xl font-semibold text-[var(--color-verde-oscuro)]">
+              <h3 className="mt-8 font-titulo text-3xl font-semibold text-[var(--color-verde-oscuro)]">
                 Mensaje enviado correctamente
               </h3>
-              <p className="mt-3 text-[var(--color-tinta)]/70 leading-relaxed max-w-md mx-auto">
+              <p className="mt-4 text-lg text-[var(--color-tinta)]/70 leading-relaxed max-w-md mx-auto">
                 Gracias por comunicarte con INCA EDUCA. Nos pondremos en contacto
                 contigo pronto.
               </p>
@@ -110,28 +110,28 @@ export default function ContactoFormulario() {
   }
 
   return (
-    <section id="formulario" className="bg-white py-20 scroll-mt-24">
-      <div className="max-w-3xl mx-auto px-6">
+    <section id="formulario" className="bg-white py-24 scroll-mt-24">
+      <div className="max-w-4xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
+          <h2 className="font-titulo text-4xl md:text-5xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Cuéntanos cómo podemos ayudarte
           </h2>
-          <p className="mt-3 text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
+          <p className="mt-4 text-lg text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
             Escríbenos y nuestro equipo se pondrá en contacto contigo.
           </p>
         </FadeIn>
 
         <FadeIn delay={100}>
-          <form onSubmit={manejarEnvio} noValidate className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <form onSubmit={manejarEnvio} noValidate className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-[var(--color-tinta)] mb-1">
+              <label className="block text-base font-semibold text-[var(--color-tinta)] mb-1.5">
                 Nombre completo
               </label>
               <input
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="Ej. María Quispe"
-                className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-colors focus:border-[var(--color-verde)] ${
+                className={`w-full rounded-xl border px-5 py-3.5 text-lg outline-none transition-colors focus:border-[var(--color-verde)] ${
                   errores.nombre ? "border-red-400" : "border-[var(--color-linea)]"
                 }`}
               />
@@ -139,7 +139,7 @@ export default function ContactoFormulario() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--color-tinta)] mb-1">
+              <label className="block text-base font-semibold text-[var(--color-tinta)] mb-1.5">
                 Correo electrónico
               </label>
               <input
@@ -147,7 +147,7 @@ export default function ContactoFormulario() {
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="tucorreo@ejemplo.com"
-                className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-colors focus:border-[var(--color-verde)] ${
+                className={`w-full rounded-xl border px-5 py-3.5 text-lg outline-none transition-colors focus:border-[var(--color-verde)] ${
                   errores.correo ? "border-red-400" : "border-[var(--color-linea)]"
                 }`}
               />
@@ -155,7 +155,7 @@ export default function ContactoFormulario() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--color-tinta)] mb-1">
+              <label className="block text-base font-semibold text-[var(--color-tinta)] mb-1.5">
                 Teléfono
               </label>
               <input
@@ -164,7 +164,7 @@ export default function ContactoFormulario() {
                 placeholder="9 dígitos"
                 maxLength={9}
                 inputMode="numeric"
-                className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-colors focus:border-[var(--color-verde)] ${
+                className={`w-full rounded-xl border px-5 py-3.5 text-lg outline-none transition-colors focus:border-[var(--color-verde)] ${
                   errores.telefono ? "border-red-400" : "border-[var(--color-linea)]"
                 }`}
               />
@@ -172,13 +172,13 @@ export default function ContactoFormulario() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[var(--color-tinta)] mb-1">
+              <label className="block text-base font-semibold text-[var(--color-tinta)] mb-1.5">
                 Motivo de consulta
               </label>
               <select
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value as MotivoConsulta)}
-                className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-colors focus:border-[var(--color-verde)] ${
+                className={`w-full rounded-xl border px-5 py-3.5 text-lg outline-none transition-colors focus:border-[var(--color-verde)] ${
                   errores.motivo ? "border-red-400" : "border-[var(--color-linea)]"
                 }`}
               >
@@ -193,7 +193,7 @@ export default function ContactoFormulario() {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-sm font-semibold text-[var(--color-tinta)] mb-1">
+              <label className="block text-base font-semibold text-[var(--color-tinta)] mb-1.5">
                 Mensaje
               </label>
               <textarea
@@ -201,7 +201,7 @@ export default function ContactoFormulario() {
                 onChange={(e) => setMensaje(e.target.value)}
                 placeholder="Cuéntanos en qué podemos ayudarte…"
                 rows={5}
-                className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-colors resize-none focus:border-[var(--color-verde)] ${
+                className={`w-full rounded-xl border px-5 py-3.5 text-lg outline-none transition-colors resize-none focus:border-[var(--color-verde)] ${
                   errores.mensaje ? "border-red-400" : "border-[var(--color-linea)]"
                 }`}
               />
@@ -231,7 +231,7 @@ export default function ContactoFormulario() {
               <button
                 type="submit"
                 disabled={enviando}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-8 py-3.5 shadow-md transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-naranja)] text-white font-semibold text-lg px-9 py-4 shadow-md transition-all duration-300 ease-out hover:brightness-95 hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0"
               >
                 <IconSend className="w-4 h-4" />
                 {enviando ? "Enviando…" : "Enviar consulta →"}

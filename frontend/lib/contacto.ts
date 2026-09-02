@@ -11,11 +11,9 @@ export const TELEFONO = "(084) 275994";
 export const TELEFONO_TEL_HREF = "tel:+51084275994";
 export const CORREO = "info@incaeduca.edu.pe";
 
-// TODO(INCA EDUCA): reemplazar por el número real de WhatsApp institucional,
-// en formato internacional sin espacios ni símbolos (ej. "51984123456").
-// Mientras este valor sea el de ejemplo, los botones de WhatsApp de la
-// sección de Contacto quedan funcionales pero apuntan a un número ficticio.
-export const WHATSAPP_NUMERO = "51900000000"; // ⚠️ PENDIENTE: número real de INCA EDUCA
+// Número real de WhatsApp institucional de INCA EDUCA, en formato
+// internacional sin espacios ni símbolos.
+export const WHATSAPP_NUMERO = "51907686133";
 export const WHATSAPP_MENSAJE_INICIAL =
   "Hola, quisiera obtener información sobre las carreras de INCA EDUCA.";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(
