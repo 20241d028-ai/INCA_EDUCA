@@ -13,11 +13,11 @@ export default function NosotrosPage() {
     <main>
       <NosotrosHero />
       <QuienesSomos />
+      <MisionVisionSection />
       <HistoriaTimeline />
       <ImpactoSection />
       <FormacionSection />
       <OportunidadesSection />
-      <MisionVisionSection />
       <DesafioSection />
       <ContactoSection />
     </main>
