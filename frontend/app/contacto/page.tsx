@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import ContactoHero from "@/components/contacto/ContactoHero";
-import ContactoTarjetas from "@/components/contacto/ContactoTarjetas";
-import ContactoWhatsApp from "@/components/contacto/ContactoWhatsApp";
-import ContactoFormulario from "@/components/contacto/ContactoFormulario";
+import ContactoMetodos from "@/components/contacto/ContactoMetodos";
 import ContactoUbicacion from "@/components/contacto/ContactoUbicacion";
 import ContactoFaq from "@/components/contacto/ContactoFaq";
 import ContactoCtaFinal from "@/components/contacto/ContactoCtaFinal";
@@ -17,10 +15,8 @@ export default function ContactoPage() {
   return (
     <main>
       <ContactoHero />
-      <ContactoTarjetas />
-      <ContactoWhatsApp />
-      <ContactoFormulario />
       <ContactoUbicacion />
+      <ContactoMetodos />
       <ContactoFaq />
       <ContactoCtaFinal />
     </main>
