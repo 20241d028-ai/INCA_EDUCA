@@ -44,6 +44,16 @@ export default function CountUp({
   useEffect(() => {
     if (!iniciado) return;
 
+    // Respeta "reducir movimiento" del sistema: muestra el numero final
+    // directamente, sin la cuenta progresiva.
+    const prefiereMenosMovimiento =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefiereMenosMovimiento) {
+      setValor(to);
+      return;
+    }
+
     const inicio = performance.now();
     let frame: number;
 

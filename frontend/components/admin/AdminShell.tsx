@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconChat, IconImage } from "@/components/ui/Icons";
+import { IconChat, IconImage, IconGraduationCap } from "@/components/ui/Icons";
 
 const SECCIONES = [
   { href: "/admin/chatbot", label: "Chatbot", icono: IconChat },
   { href: "/admin/galeria", label: "Galería", icono: IconImage },
+  { href: "/admin/carreras", label: "Carreras", icono: IconGraduationCap },
 ];
 
 export default function AdminShell({

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { IconGraduationCap } from "@/components/ui/Icons";
 import FadeIn from "@/components/ui/FadeIn";
+import SectionDecor from "@/components/ui/SectionDecor";
 
 const CARRERAS_OFICIALES = [
   "Gastronomía",
@@ -14,8 +15,9 @@ const CARRERAS_OFICIALES = [
 
 export default function FormacionSection() {
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-4xl mx-auto px-6 text-center">
+    <section className="relative overflow-hidden bg-[var(--color-crema)] py-20">
+      <SectionDecor variant="verde" />
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <FadeIn>
           <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)]">
             Formación técnica para nuevas oportunidades

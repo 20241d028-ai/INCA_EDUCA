@@ -96,30 +96,69 @@ export async function escalarConversacion(postulanteId: string, historial: Mensa
   return res.json();
 }
 
+export interface CarreraApi {
+  id: string;
+  nombre: string;
+  slug: string;
+  duracionMeses: number;
+  imagenUrl: string | null;
+  descripcionCorta: string | null;
+  // ISO 8601 (ej. "2026-11-15T00:00:00.000Z") o null si todavía no se fijó
+  // una fecha de inicio para esta carrera. Administrable desde
+  // /admin/carreras; se muestra tal cual llega, sin inventar una si es null.
+  fechaInicio: string | null;
+}
+
 export async function listarCarreras() {
   const res = await fetch(`${API_URL}/api/carreras`);
   if (!res.ok) throw new Error("No se pudieron cargar las carreras");
-  return res.json() as Promise<{
-    id: string;
-    nombre: string;
-    slug: string;
-    duracionMeses: number;
-    imagenUrl: string | null;
-    descripcionCorta: string | null;
-  }[]>;
+  return res.json() as Promise<CarreraApi[]>;
 }
 
 export async function obtenerCarreraPorSlug(slug: string) {
   const res = await fetch(`${API_URL}/api/carreras/${slug}`);
   if (!res.ok) throw new Error("Carrera no encontrada");
-  return res.json() as Promise<{
-    id: string;
-    nombre: string;
-    slug: string;
-    duracionMeses: number;
-    imagenUrl: string | null;
-    descripcionCorta: string | null;
-  }>;
+  return res.json() as Promise<CarreraApi>;
+}
+
+// Admin: por ahora solo permite editar la fecha de inicio de una carrera
+// (lo único administrable en /admin/carreras). Pasar null para quitarla.
+export async function actualizarFechaInicioCarrera(
+  id: string,
+  fechaInicio: string | null,
+  token: string
+) {
+  const res = await fetch(`${API_URL}/api/carreras/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ fechaInicio }),
+  });
+  if (!res.ok) await lanzarErrorApi(res, "No se pudo actualizar la fecha de inicio");
+  return res.json() as Promise<CarreraApi>;
+}
+
+export interface ConfiguracionSitioApi {
+  fechaInicioClases: string | null;
+}
+
+// Fecha de inicio de clases GENERAL de la institución (distinta de la
+// fecha por carrera de CarreraApi.fechaInicio). Se muestra en la sección
+// de inicio de la web. Público: no requiere token.
+export async function obtenerConfiguracionSitio() {
+  const res = await fetch(`${API_URL}/api/configuracion`, { cache: "no-store" });
+  if (!res.ok) throw new Error("No se pudo cargar la configuración del sitio");
+  return res.json() as Promise<ConfiguracionSitioApi>;
+}
+
+// Admin: única acción disponible por ahora sobre la configuración general.
+export async function actualizarFechaInicioClasesGeneral(fechaInicioClases: string | null, token: string) {
+  const res = await fetch(`${API_URL}/api/configuracion`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ fechaInicioClases }),
+  });
+  if (!res.ok) await lanzarErrorApi(res, "No se pudo actualizar la fecha de inicio de clases");
+  return res.json() as Promise<ConfiguracionSitioApi>;
 }
 
 export async function listarGaleria(filtros?: {

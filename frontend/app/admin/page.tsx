@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAdminToken } from "@/lib/adminAuth";
 import AdminShell from "@/components/admin/AdminShell";
-import { IconChat, IconImage } from "@/components/ui/Icons";
+import { IconChat, IconImage, IconGraduationCap } from "@/components/ui/Icons";
 
 const SECCIONES = [
   {
@@ -17,6 +17,12 @@ const SECCIONES = [
     titulo: "Galería",
     descripcion: "Sube, organiza y elimina las fotos y videos de la galería pública.",
     icono: IconImage,
+  },
+  {
+    href: "/admin/carreras",
+    titulo: "Carreras",
+    descripcion: "Administra la fecha de inicio de cada carrera, visible en la web y el chatbot.",
+    icono: IconGraduationCap,
   },
 ];
 

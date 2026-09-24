@@ -1,6 +1,14 @@
 import type { CarreraContenidoDetallado } from "@/lib/carrerasContenido";
 
-export default function CarreraInfoRapida({ contenido }: { contenido: CarreraContenidoDetallado }) {
+export default function CarreraInfoRapida({
+  contenido,
+  fechaInicio,
+}: {
+  contenido: CarreraContenidoDetallado;
+  // Fecha real de la carrera (ya formateada, ej. "15 de noviembre de
+  // 2026"), administrada desde /admin/carreras. null si todavía no se fijó.
+  fechaInicio?: string | null;
+}) {
   return (
     <section className="bg-[var(--color-fondo)] pb-16 sm:pb-20">
       <div className="max-w-6xl mx-auto px-6">
@@ -17,6 +25,12 @@ export default function CarreraInfoRapida({ contenido }: { contenido: CarreraCon
               </div>
             ))}
           </div>
+
+          {fechaInicio && (
+            <p className="mt-8 pt-6 border-t border-white/15 text-center text-sm sm:text-base font-semibold text-white/90">
+              Próximo inicio: <span className="text-[var(--color-naranja)]">{fechaInicio}</span>
+            </p>
+          )}
         </div>
       </div>
     </section>

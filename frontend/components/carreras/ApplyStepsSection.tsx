@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { IconCompass, IconClipboardList, IconPenLine, IconFlag } from "@/components/ui/Icons";
+import FadeIn from "@/components/ui/FadeIn";
 
 const PASOS = [
   {
@@ -32,12 +33,16 @@ export default function ApplyStepsSection() {
   return (
     <section className="bg-white py-20">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
-          ¿Cómo puedes postular?
-        </h2>
-        <p className="mt-3 text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
-          En 4 pasos simples puedes iniciar tu camino profesional en INCA EDUCA.
-        </p>
+        <FadeIn>
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
+            ¿Cómo puedes postular?
+          </h2>
+        </FadeIn>
+        <FadeIn delay={100}>
+          <p className="mt-3 text-[var(--color-tinta)]/70 text-center max-w-xl mx-auto">
+            En 4 pasos simples puedes iniciar tu camino profesional en INCA EDUCA.
+          </p>
+        </FadeIn>
 
         <div className="mt-16">
           {/* Desktop: 4 columnas conectadas por una línea horizontal */}
@@ -46,10 +51,11 @@ export default function ApplyStepsSection() {
               className="absolute top-7 left-[12.5%] right-[12.5%] h-0.5 bg-[var(--color-linea)]"
               aria-hidden="true"
             />
-            {PASOS.map((p) => {
+            {PASOS.map((p, i) => {
               const Icono = p.icono;
               return (
-                <div key={p.numero} className="relative z-10 text-center">
+                <FadeIn key={p.numero} delay={i * 100}>
+                <div className="relative z-10 text-center">
                   <div className="mx-auto w-14 h-14 rounded-full bg-[var(--color-naranja)] text-white flex items-center justify-center font-titulo font-extrabold shadow-md">
                     {p.numero}
                   </div>
@@ -63,6 +69,7 @@ export default function ApplyStepsSection() {
                     {p.descripcion}
                   </p>
                 </div>
+                </FadeIn>
               );
             })}
           </div>
@@ -73,7 +80,8 @@ export default function ApplyStepsSection() {
               const Icono = p.icono;
               const esUltimo = i === PASOS.length - 1;
               return (
-                <div key={p.numero} className="flex gap-4">
+                <FadeIn key={p.numero} delay={i * 100}>
+                <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[var(--color-naranja)] text-white flex items-center justify-center font-titulo font-extrabold shadow-md">
                       {p.numero}
@@ -90,6 +98,7 @@ export default function ApplyStepsSection() {
                     <p className="mt-1.5 text-sm text-[var(--color-tinta)]/70">{p.descripcion}</p>
                   </div>
                 </div>
+                </FadeIn>
               );
             })}
           </div>

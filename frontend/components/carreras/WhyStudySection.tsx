@@ -1,4 +1,6 @@
 import { IconGraduationCap, IconWrench, IconUserCheck, IconRocket } from "@/components/ui/Icons";
+import FadeIn from "@/components/ui/FadeIn";
+import SectionDecor from "@/components/ui/SectionDecor";
 
 const PUNTOS = [
   {
@@ -25,21 +27,26 @@ const PUNTOS = [
 
 export default function WhyStudySection() {
   return (
-    <section className="bg-[var(--color-verde-oscuro)] py-20">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white text-center">
-          ¿Por qué estudiar en INCA EDUCA?
-        </h2>
-        <p className="mt-3 text-white/70 text-center max-w-xl mx-auto">
-          Una formación pensada para que salgas preparado, con bases sólidas y visión de futuro.
-        </p>
+    <section className="relative overflow-hidden bg-[var(--color-verde-oscuro)] py-20">
+      <SectionDecor variant="claro" />
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
+        <FadeIn>
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white text-center">
+            ¿Por qué estudiar en INCA EDUCA?
+          </h2>
+        </FadeIn>
+        <FadeIn delay={100}>
+          <p className="mt-3 text-white/70 text-center max-w-xl mx-auto">
+            Una formación pensada para que salgas preparado, con bases sólidas y visión de futuro.
+          </p>
+        </FadeIn>
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PUNTOS.map((p) => {
+          {PUNTOS.map((p, i) => {
             const Icono = p.icono;
             return (
+              <FadeIn key={p.titulo} delay={200 + i * 90}>
               <div
-                key={p.titulo}
                 className="group bg-[var(--color-fondo)] rounded-3xl p-7 shadow-lg transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-2xl"
               >
                 <div className="w-14 h-14 rounded-2xl bg-[var(--color-naranja)]/10 flex items-center justify-center text-[var(--color-naranja)] transition-colors duration-300 group-hover:bg-[var(--color-naranja)] group-hover:text-white">
@@ -52,6 +59,7 @@ export default function WhyStudySection() {
                   {p.descripcion}
                 </p>
               </div>
+              </FadeIn>
             );
           })}
         </div>

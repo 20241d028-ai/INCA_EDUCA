@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { crearPostulante, listarCarreras } from "@/lib/api";
+import { formatFechaInicio } from "@/lib/format";
 
 export default function AdmisionPage() {
-  const [carreras, setCarreras] = useState<{ id: string; nombre: string }[]>([]);
+  const [carreras, setCarreras] = useState<{ id: string; nombre: string; fechaInicio: string | null }[]>([]);
   const [nombreApellido, setNombreApellido] = useState("");
   const [dni, setDni] = useState("");
   const [celular, setCelular] = useState("");
@@ -19,6 +20,9 @@ export default function AdmisionPage() {
       .then(setCarreras)
       .catch(() => setError("No se pudieron cargar las carreras. Intenta recargar la página."));
   }, []);
+
+  const carreraSeleccionada = carreras.find((c) => c.id === carreraId) ?? null;
+  const fechaInicioSeleccionada = formatFechaInicio(carreraSeleccionada?.fechaInicio);
 
   async function manejarEnvio(e: React.FormEvent) {
     e.preventDefault();
@@ -140,6 +144,14 @@ export default function AdmisionPage() {
               </option>
             ))}
           </select>
+
+          {carreraSeleccionada && (
+            <p className="mt-2 text-sm font-semibold text-[var(--color-verde-oscuro)]">
+              {fechaInicioSeleccionada
+                ? `Fecha de inicio: ${fechaInicioSeleccionada}`
+                : "La fecha de inicio de esta carrera se confirma con un asesor."}
+            </p>
+          )}
         </div>
 
         <label className="flex items-start gap-2 text-sm text-[var(--color-tinta)]/80">

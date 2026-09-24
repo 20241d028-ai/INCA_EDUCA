@@ -11,10 +11,10 @@ const INDICADORES = [
 
 export default function ImpactoSection() {
   return (
-    <section className="bg-[var(--color-verde-oscuro)] py-20">
+    <section className="bg-[var(--color-fondo)] py-20">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-white text-center">
+          <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Nuestro impacto
           </h2>
         </FadeIn>
@@ -28,7 +28,7 @@ export default function ImpactoSection() {
                 suffix={ind.suffix}
                 className="font-titulo text-4xl sm:text-5xl font-extrabold text-[var(--color-naranja)]"
               />
-              <p className="mt-2 text-sm sm:text-base font-semibold text-white/80 uppercase tracking-wide">
+              <p className="mt-2 text-sm sm:text-base font-semibold text-[var(--color-tinta)]/70 uppercase tracking-wide">
                 {ind.etiqueta}
               </p>
             </FadeIn>

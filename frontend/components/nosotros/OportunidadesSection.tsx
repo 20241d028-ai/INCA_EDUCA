@@ -9,10 +9,10 @@ export default function OportunidadesSection() {
         style={{ backgroundImage: "url('/hero-inca-educa.jpg')" }}
       >
         <div
-          className="absolute inset-0 bg-[var(--color-verde-oscuro)]/90"
+          className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(20,67,43,0.92) 0%, rgba(20,67,43,0.88) 100%)",
+              "linear-gradient(to bottom, rgba(20,67,43,0.75) 0%, rgba(15,40,28,0.94) 100%)",
           }}
         />
 

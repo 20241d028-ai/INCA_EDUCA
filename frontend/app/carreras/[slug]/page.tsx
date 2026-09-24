@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { obtenerCarreraPorSlug } from "@/lib/api";
 import { generarMallaPlaceholder } from "@/lib/mallas";
-import { formatDuracion } from "@/lib/format";
+import { formatDuracion, formatFechaInicio } from "@/lib/format";
 import { obtenerContenidoCarrera } from "@/lib/carrerasContenido";
 
 import CarreraHero from "@/components/carreras/detalle/CarreraHero";
@@ -54,6 +54,8 @@ export default async function CarreraDetallePage({
     notFound();
   }
 
+  const fechaInicio = formatFechaInicio(carrera.fechaInicio);
+
   // Página completa y modernizada: solo para las carreras que tienen
   // contenido enriquecido definido en lib/carrerasContenido.ts (por ahora,
   // únicamente Gastronomía Internacional). El resto de carreras conserva
@@ -63,7 +65,7 @@ export default async function CarreraDetallePage({
     return (
       <main>
         <CarreraHero contenido={contenido} />
-        <CarreraInfoRapida contenido={contenido} />
+        <CarreraInfoRapida contenido={contenido} fechaInicio={fechaInicio} />
         {contenido.notaPendiente && <CarreraNotaPendiente texto={contenido.notaPendiente} />}
         <CarreraSubnav />
         <CarreraSobreLaCarrera contenido={contenido} />
@@ -98,6 +100,11 @@ export default async function CarreraDetallePage({
       </h1>
       <p className="mt-2 text-[var(--color-tinta)]/70">
         Duración: {formatDuracion(carrera.duracionMeses)}
+      </p>
+      <p className="mt-1 font-semibold text-[var(--color-verde-oscuro)]">
+        {fechaInicio
+          ? `Fecha de inicio: ${fechaInicio}`
+          : "Fecha de inicio: se confirma con un asesor"}
       </p>
       <p className="mt-6 text-[var(--color-tinta)] leading-relaxed">
         {carrera.descripcionCorta || "Próximamente más información sobre esta carrera."}

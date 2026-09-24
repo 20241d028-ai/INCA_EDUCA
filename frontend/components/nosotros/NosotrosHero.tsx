@@ -1,14 +1,18 @@
 import Link from "next/link";
 import Swoosh from "@/components/ui/Swoosh";
 import FadeIn from "@/components/ui/FadeIn";
+import ParallaxLayer from "@/components/ui/ParallaxLayer";
 
 export default function NosotrosHero() {
   return (
     <section className="relative overflow-hidden">
-      <div
-        className="relative min-h-screen flex items-center bg-cover bg-[center_25%]"
-        style={{ backgroundImage: "url('/hero-inca-educa.jpg')" }}
-      >
+      <div className="relative min-h-screen flex items-center">
+        <ParallaxLayer strength={260} className="bg-cover bg-[center_25%]">
+          <div
+            className="absolute inset-0 bg-cover bg-[center_25%]"
+            style={{ backgroundImage: "url('/hero-inca-educa.jpg')" }}
+          />
+        </ParallaxLayer>
         <div
           className="absolute inset-0"
           style={{

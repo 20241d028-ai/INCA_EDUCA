@@ -39,7 +39,7 @@ export default function FaqSection() {
   const [abierta, setAbierta] = useState<number | null>(0);
 
   return (
-    <section className="bg-[var(--color-fondo)] py-20">
+    <section className="bg-white py-20">
       <div className="max-w-3xl mx-auto px-6">
         <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
           Preguntas frecuentes

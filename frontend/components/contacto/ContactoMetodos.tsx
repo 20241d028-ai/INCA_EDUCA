@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import FadeIn from "@/components/ui/FadeIn";
 import { IconMapPin, IconPhone, IconMail, IconWhatsApp } from "@/components/ui/Icons";
+import SectionDecor from "@/components/ui/SectionDecor";
 import {
   DIRECCION,
   TELEFONO,
@@ -45,8 +46,9 @@ export default function ContactoMetodos() {
   const abierto = useHorarioAtencion();
 
   return (
-    <section className="bg-white py-24 md:py-28">
-      <div className="max-w-[1400px] mx-auto px-6">
+    <section className="relative overflow-hidden bg-[var(--color-verde-claro)] py-24 md:py-28">
+      <SectionDecor variant="naranja" />
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6">
         <FadeIn>
           <h2 className="font-titulo text-4xl md:text-5xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Elige cómo prefieres contactarnos
