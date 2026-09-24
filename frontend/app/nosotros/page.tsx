@@ -6,7 +6,6 @@ import FormacionSection from "@/components/nosotros/FormacionSection";
 import OportunidadesSection from "@/components/nosotros/OportunidadesSection";
 import MisionVisionSection from "@/components/nosotros/MisionVisionSection";
 import DesafioSection from "@/components/nosotros/DesafioSection";
-import ContactoSection from "@/components/nosotros/ContactoSection";
 
 export default function NosotrosPage() {
   return (
@@ -17,9 +16,8 @@ export default function NosotrosPage() {
       <HistoriaTimeline />
       <ImpactoSection />
       <FormacionSection />
-      <OportunidadesSection />
       <DesafioSection />
-      <ContactoSection />
+      <OportunidadesSection />
     </main>
   );
 }

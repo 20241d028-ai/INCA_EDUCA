@@ -1,12 +1,17 @@
 import Link from "next/link";
+import ParallaxLayer from "@/components/ui/ParallaxLayer";
+import FadeIn from "@/components/ui/FadeIn";
 
 export default function FinalCtaSection() {
   return (
     <section className="relative overflow-hidden">
-      <div
-        className="relative bg-cover bg-center py-24 sm:py-28"
-        style={{ backgroundImage: "url('/banners/inti-raymi-inca-educa.webp')" }}
-      >
+      <div className="relative py-24 sm:py-28">
+        <ParallaxLayer strength={260} className="bg-cover bg-center">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/banners/inti-raymi-inca-educa.webp')" }}
+          />
+        </ParallaxLayer>
         <div
           className="absolute inset-0"
           style={{
@@ -16,17 +21,24 @@ export default function FinalCtaSection() {
         />
 
         <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <h2 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
-            Tu futuro tiene historia
-          </h2>
-          <p className="mt-4 text-xl sm:text-2xl font-titulo font-bold text-[var(--color-naranja)]">
-            Escribe tu próxima historia en INCA EDUCA.
-          </p>
-          <p className="mt-5 text-white/85 leading-relaxed max-w-xl mx-auto">
-            Conoce nuestras carreras, desarrolla nuevas habilidades y comienza tu formación
-            profesional.
-          </p>
+          <FadeIn>
+            <h2 className="font-titulo text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
+              Tu futuro tiene historia
+            </h2>
+          </FadeIn>
+          <FadeIn delay={100}>
+            <p className="mt-4 text-xl sm:text-2xl font-titulo font-bold text-[var(--color-naranja)]">
+              Escribe tu próxima historia en INCA EDUCA.
+            </p>
+          </FadeIn>
+          <FadeIn delay={200}>
+            <p className="mt-5 text-white/85 leading-relaxed max-w-xl mx-auto">
+              Conoce nuestras carreras, desarrolla nuevas habilidades y comienza tu formación
+              profesional.
+            </p>
+          </FadeIn>
 
+          <FadeIn delay={300}>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/admision"
@@ -42,6 +54,7 @@ export default function FinalCtaSection() {
               VER CARRERAS
             </Link>
           </div>
+          </FadeIn>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import FadeIn from "@/components/ui/FadeIn";
 import { IconChevronDown, IconChat } from "@/components/ui/Icons";
 import { TELEFONO, CORREO } from "@/lib/contacto";
+import SectionDecor from "@/components/ui/SectionDecor";
 
 const PREGUNTAS = [
   {
@@ -36,8 +37,9 @@ export default function ContactoFaq() {
   const [abierta, setAbierta] = useState<number | null>(0);
 
   return (
-    <section className="bg-white py-24">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="relative overflow-hidden bg-white py-24">
+      <SectionDecor variant="verde" />
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
         <FadeIn>
           <span className="flex items-center justify-center gap-2 text-xs sm:text-sm font-bold tracking-widest text-[var(--color-verde)]">
             <span className="w-2 h-2 rotate-45 bg-[var(--color-naranja)]" aria-hidden="true" />

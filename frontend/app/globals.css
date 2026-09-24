@@ -7,6 +7,17 @@
   --color-fondo: #F7F8F4;
   --color-tinta: #17231D;
   --color-linea: #E8E2D4;
+
+  /* Tonos intermedios derivados de la paleta, para la jerarquia visual
+     fuerte -> claro entre secciones (no son colores nuevos, son variaciones
+     de --color-verde y --color-naranja ya existentes). */
+  --color-verde-medio: color-mix(in srgb, var(--color-verde) 14%, white);
+  --color-verde-claro: color-mix(in srgb, var(--color-verde) 6%, white);
+  --color-crema: color-mix(in srgb, var(--color-naranja) 5%, var(--color-fondo));
+  /* Verde mas claro pero todavia con suficiente saturacion para que el texto
+     blanco se siga leyendo bien encima (a diferencia de verde-claro/verde-medio,
+     que son casi blancos y pensados para fondos con texto oscuro). */
+  --color-verde-suave: color-mix(in srgb, var(--color-verde) 62%, white);
 }
 
 body {
@@ -173,5 +184,19 @@ body {
   }
   .animate-hero-progreso {
     animation: none;
+  }
+}
+
+/* Red de seguridad global: si el usuario tiene animaciones reducidas
+   activadas en su sistema, todas las transiciones y animaciones del sitio
+   (incluidas FadeIn y las de este archivo) se vuelven instantaneas. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

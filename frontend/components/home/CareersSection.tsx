@@ -9,6 +9,7 @@ interface Carrera {
   duracionMeses: number;
   imagenUrl: string | null;
   descripcionCorta: string | null;
+  fechaInicio?: string | null;
 }
 
 export default function CareersSection({ carreras }: { carreras: Carrera[] }) {

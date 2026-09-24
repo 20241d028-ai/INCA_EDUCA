@@ -18,6 +18,7 @@ model Carrera {
   duracionMeses   Int          @map("duracion_meses")
   imagenUrl       String?      @map("imagen_url")
   descripcionCorta String?     @map("descripcion_corta")
+  fechaInicio     DateTime?    @map("fecha_inicio")
   creadoEn        DateTime     @default(now()) @map("creado_en")
 
   postulantes     Postulante[]
@@ -121,8 +122,14 @@ enum EstadoSeguimiento {
 
 model Seguimiento {
   id             String             @id @default(uuid())
-  postulanteId   String             @map("postulante_id")
-  postulante     Postulante         @relation(fields: [postulanteId], references: [id])
+  // Un seguimiento pertenece a un Postulante O a un Contacto (nunca
+  // ambos), por eso las dos relaciones son opcionales. Reflejado así desde
+  // que se agregó el seguimiento de mensajes de /contacto (migración
+  // 20260831151956_add_contacto_seguimiento_relation).
+  postulanteId   String?            @map("postulante_id")
+  postulante     Postulante?        @relation(fields: [postulanteId], references: [id])
+  contactoId     String?            @map("contacto_id")
+  contacto       Contacto?          @relation(fields: [contactoId], references: [id])
   adminId        String?            @map("admin_id")
   admin          Admin?             @relation(fields: [adminId], references: [id])
   canal          CanalSeguimiento
@@ -202,7 +209,24 @@ model Contacto {
   estado      EstadoContacto  @default(nuevo)
   creadoEn    DateTime        @default(now()) @map("creado_en")
 
+  seguimientos Seguimiento[]
+
   @@map("contactos")
+}
+
+// ---------------------------------------------------------------------------
+// CONFIGURACION_SITIO — ajustes generales del sitio (fila única, id fijo)
+// ---------------------------------------------------------------------------
+model ConfiguracionSitio {
+  id                String    @id @default("general")
+  // Fecha de inicio de clases general de la institución (no es por
+  // carrera; para eso está Carrera.fechaInicio). Se muestra en la sección
+  // de inicio de la web. Nullable a propósito: si no se fija, la web no
+  // inventa una fecha.
+  fechaInicioClases DateTime? @map("fecha_inicio_clases")
+  actualizadoEn     DateTime  @updatedAt @map("actualizado_en")
+
+  @@map("configuracion_sitio")
 }
 
 // ---------------------------------------------------------------------------

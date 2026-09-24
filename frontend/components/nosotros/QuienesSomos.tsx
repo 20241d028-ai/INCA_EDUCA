@@ -1,4 +1,5 @@
 import FadeIn from "@/components/ui/FadeIn";
+import SectionDecor from "@/components/ui/SectionDecor";
 
 const BLOQUES = [
   {
@@ -25,8 +26,9 @@ const BLOQUES = [
 
 export default function QuienesSomos() {
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="relative overflow-hidden bg-[var(--color-verde-claro)] py-20">
+      <SectionDecor variant="verde" />
+      <div className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <FadeIn>
           <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)]">
             ¿Quiénes somos?

@@ -1,6 +1,7 @@
 "use client";
 
 import Swoosh from "@/components/ui/Swoosh";
+import ParallaxLayer from "@/components/ui/ParallaxLayer";
 
 type Segmento = { texto: string; color: string };
 type Linea = { tipo: "normal" | "resaltado" | "resaltado-grande"; segmentos: Segmento[] };
@@ -50,10 +51,13 @@ function Letras({ letras }: { letras: { letra: string; indice: number }[] }) {
 
 export default function CarrerasBanner() {
   return (
-    <div
-      className="absolute inset-0 bg-cover bg-center bg-[var(--color-linea)]"
-      style={{ backgroundImage: "url('/banners/inti-raymi-inca-educa.webp')" }}
-    >
+    <div className="absolute inset-0 overflow-hidden bg-[var(--color-linea)]">
+      <ParallaxLayer strength={260} className="bg-cover bg-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/banners/inti-raymi-inca-educa.webp')" }}
+        />
+      </ParallaxLayer>
       <div
         className="absolute inset-0"
         style={{

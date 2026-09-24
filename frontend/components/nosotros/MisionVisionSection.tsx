@@ -1,5 +1,6 @@
 import { IconFlag, IconCompass } from "@/components/ui/Icons";
 import FadeIn from "@/components/ui/FadeIn";
+import SectionDecor from "@/components/ui/SectionDecor";
 
 const TARJETAS = [
   {
@@ -28,8 +29,9 @@ const TARJETAS = [
 
 export default function MisionVisionSection() {
   return (
-    <section className="bg-[var(--color-fondo)] py-20">
-      <div className="max-w-5xl mx-auto px-6">
+    <section className="relative overflow-hidden bg-[var(--color-fondo)] py-20">
+      <SectionDecor variant="naranja" />
+      <div className="relative z-10 max-w-5xl mx-auto px-6">
         <FadeIn>
           <h2 className="font-titulo text-3xl md:text-4xl font-bold text-[var(--color-verde-oscuro)] text-center">
             Misión y visión
