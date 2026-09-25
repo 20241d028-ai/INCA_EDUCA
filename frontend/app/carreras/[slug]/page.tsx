@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { obtenerCarreraPorSlug } from "@/lib/api";
 import { generarMallaPlaceholder } from "@/lib/mallas";
 import { formatDuracion, formatFechaInicio } from "@/lib/format";
 import { obtenerContenidoCarrera } from "@/lib/carrerasContenido";
+import { CARRERAS_GENERICAS } from "@/lib/carrerasGenericas";
 
 import CarreraHero from "@/components/carreras/detalle/CarreraHero";
 import CarreraInfoRapida from "@/components/carreras/detalle/CarreraInfoRapida";
@@ -21,6 +21,12 @@ import CarreraEmprendimiento from "@/components/carreras/detalle/CarreraEmprendi
 import CarreraGaleria from "@/components/carreras/detalle/CarreraGaleria";
 import CarreraFAQ from "@/components/carreras/detalle/CarreraFAQ";
 import CarreraCTAFinal from "@/components/carreras/detalle/CarreraCTAFinal";
+import CarreraHeroGenerica from "@/components/carreras/detalle/CarreraHeroGenerica";
+import CarreraInfoRapidaGenerica from "@/components/carreras/detalle/CarreraInfoRapidaGenerica";
+import CarreraMallaGenerica from "@/components/carreras/detalle/CarreraMallaGenerica";
+import CarreraGaleriaGenerica from "@/components/carreras/detalle/CarreraGaleriaGenerica";
+import CarreraCTAFinalGenerica from "@/components/carreras/detalle/CarreraCTAFinalGenerica";
+import CarreraSubnavGenerica from "@/components/carreras/detalle/CarreraSubnavGenerica";
 
 // Metadata SEO: solo se personaliza para las carreras que ya tienen
 // contenido enriquecido (ver lib/carrerasContenido.ts). Las demás no se
@@ -89,62 +95,38 @@ export default async function CarreraDetallePage({
     );
   }
 
+  // Página visualmente rica para las carreras que aún no tienen contenido
+  // enriquecido propio (todas menos Gastronomía Internacional). Usa
+  // únicamente datos reales: nombre/duración/fecha de la base de datos, el
+  // número de etapas calculado a partir de la duración real, y fotografías
+  // reales de la Galería de INCA EDUCA (lib/carrerasGenericas.ts). No
+  // reemplaza el listado general de carreras ni sus tarjetas.
+  const fotosGenericas = CARRERAS_GENERICAS[carrera.slug];
+  const etapas = generarMallaPlaceholder(carrera.duracionMeses);
+  const duracionTexto = formatDuracion(carrera.duracionMeses);
+
   return (
-    <main className="pt-24 max-w-4xl mx-auto px-6 pb-16">
-      <div
-        className="w-full h-64 rounded-3xl bg-cover bg-center bg-[var(--color-linea)]"
-        style={{ backgroundImage: `url('${carrera.imagenUrl || `/carreras/${carrera.slug}.jpg`}')` }}
+    <main>
+      <CarreraHeroGenerica
+        nombre={carrera.nombre}
+        foto={
+          fotosGenericas?.heroImagen ?? {
+            src: carrera.imagenUrl || `/carreras/${carrera.slug}.jpg`,
+            alt: `Estudiantes de ${carrera.nombre} de INCA EDUCA`,
+          }
+        }
       />
-      <h1 className="font-titulo text-4xl font-bold text-[var(--color-tinta)] mt-8">
-        {carrera.nombre}
-      </h1>
-      <p className="mt-2 text-[var(--color-tinta)]/70">
-        Duración: {formatDuracion(carrera.duracionMeses)}
-      </p>
-      <p className="mt-1 font-semibold text-[var(--color-verde-oscuro)]">
-        {fechaInicio
-          ? `Fecha de inicio: ${fechaInicio}`
-          : "Fecha de inicio: se confirma con un asesor"}
-      </p>
-      <p className="mt-6 text-[var(--color-tinta)] leading-relaxed">
-        {carrera.descripcionCorta || "Próximamente más información sobre esta carrera."}
-      </p>
-
-      <section className="mt-14">
-        <h2 className="font-titulo text-2xl font-bold text-[var(--color-tinta)]">
-          Malla curricular
-        </h2>
-        <p className="mt-1 text-sm text-[var(--color-tinta)]/60">
-          Referencial. El plan de estudios detallado se confirma con un asesor.
-        </p>
-
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {generarMallaPlaceholder(carrera.duracionMeses).map((c) => (
-            <div
-              key={c.ciclo}
-              className="rounded-2xl border border-[var(--color-linea)] p-5 flex items-center gap-4"
-            >
-              <div className="w-10 h-10 flex-shrink-0 rounded-full bg-[var(--color-verde)] text-white font-titulo font-bold flex items-center justify-center">
-                {c.ciclo}
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[var(--color-tinta)]/50 uppercase">
-                  Ciclo {c.ciclo}
-                </p>
-                <p className="font-semibold text-[var(--color-tinta)]">{c.titulo}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <Link
-        href="/admision"
-        className="inline-flex items-center gap-2 mt-12 rounded-full bg-[var(--color-naranja)] text-white font-semibold px-7 py-3.5 hover:brightness-95 transition"
-      >
-        Postular a esta carrera
-        <span aria-hidden="true">→</span>
-      </Link>
+      <CarreraInfoRapidaGenerica
+        duracionTexto={duracionTexto}
+        fechaInicio={fechaInicio}
+        numeroEtapas={etapas.length}
+      />
+      <CarreraSubnavGenerica tieneGaleria={Boolean(fotosGenericas && fotosGenericas.galeria.length > 0)} />
+      <CarreraMallaGenerica duracionMeses={carrera.duracionMeses} />
+      {fotosGenericas && fotosGenericas.galeria.length > 0 && (
+        <CarreraGaleriaGenerica fotos={fotosGenericas.galeria} />
+      )}
+      <CarreraCTAFinalGenerica nombre={carrera.nombre} />
     </main>
   );
 }

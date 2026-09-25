@@ -170,6 +170,11 @@ export default function ChatWidget() {
    * proyecto; no crea rutas nuevas.
    */
   function irASeccion(ruta: string, idSeccion?: string) {
+    // Cerramos el widget al navegar para que el usuario vea de inmediato
+    // la sección/página a la que lo llevamos, en vez de dejarlo tapado
+    // detrás del chat abierto.
+    setAbierto(false);
+
     if (pathname === ruta) {
       if (idSeccion) {
         document.getElementById(idSeccion)?.scrollIntoView({ behavior: "smooth", block: "start" });

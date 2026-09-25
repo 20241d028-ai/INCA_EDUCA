@@ -1,3 +1,4 @@
+import ContadorAnimado from "@/components/ui/ContadorAnimado";
 import type { CarreraContenidoDetallado } from "@/lib/carrerasContenido";
 
 export default function CarreraInfoRapida({
@@ -17,7 +18,7 @@ export default function CarreraInfoRapida({
             {contenido.statsRapidas.map((s) => (
               <div key={s.etiqueta}>
                 <p className="font-titulo text-4xl sm:text-5xl font-extrabold text-[var(--color-naranja)]">
-                  {s.valor}
+                  <ContadorAnimado valor={s.valor} />
                 </p>
                 <p className="mt-2 text-sm sm:text-base font-semibold text-white/80 uppercase tracking-wide">
                   {s.etiqueta}
