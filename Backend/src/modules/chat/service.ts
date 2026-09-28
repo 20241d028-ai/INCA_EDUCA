@@ -2,9 +2,9 @@ import { prisma } from "../../prisma";
 import { listarCarreras } from "../carreras/service";
 import { RemitenteMensaje, TipoMensaje } from "@prisma/client";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY as string;
-const GEMINI_MODEL = "gemini-3.5-flash-lite";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY as string;
+const ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
+const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 
 type CanalChat = "web" | "whatsapp";
 
@@ -88,7 +88,11 @@ Reglas:
 - Si te preguntan algo fuera de este contexto, indica amablemente que solo puedes ayudar con temas de INCA EDUCA.
 - ${instruccionAsesor}
 - No uses formato Markdown (nada de asteriscos, negritas ni listas con guiones). Escribe en texto plano, en párrafos cortos.${instruccionTono}${instruccionListasCarreras}
-- Sé breve, cálido y claro.${instruccionNavegacion}`;
+- Sé breve, cálido y claro.${instruccionNavegacion}${
+    canal === "web"
+      ? "\n\nResponde SIEMPRE unicamente con un objeto JSON valido, sin texto antes ni despues, con esta forma exacta: {\"respuesta\": \"<tu respuesta aqui>\", \"accion\": null} o, si corresponde navegar, {\"respuesta\": \"<tu respuesta aqui>\", \"accion\": {\"tipo\": \"navegar\", \"ruta\": \"<ruta exacta>\"}}."
+      : ""
+  }`;
 
   return { prompt, rutasValidas };
 }
@@ -125,30 +129,53 @@ export async function generarRespuestaAgente(
 ): Promise<RespuestaAgente> {
   const { prompt: systemPrompt, rutasValidas } = await construirContextoInstitucional(canal);
 
-  const contents = historial.map((m) => ({
-    role: m.remitente === "postulante" ? "user" : "model",
-    parts: [{ text: m.contenido }],
+  const messages = historial.map((m) => ({
+    role: m.remitente === "postulante" ? "user" as const : "assistant" as const,
+    content: m.contenido,
   }));
 
-  const response = await fetch(GEMINI_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: systemPrompt }] },
-      contents,
-      ...(canal === "web"
-        ? {
-            generationConfig: {
-              responseMimeType: "application/json",
-              responseSchema: ESQUEMA_RESPUESTA_WEB,
-            },
-          }
-        : {}),
-    }),
+  const cuerpoSolicitud = JSON.stringify({
+    model: ANTHROPIC_MODEL,
+    max_tokens: 1024,
+    system: systemPrompt,
+    messages,
   });
 
-  const data = await response.json();
-  const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  // La API de Claude no tiene los cortes de capacidad del tier gratis de
+  // Gemini, pero igual reintentamos una vez ante un error transitorio de
+  // red o un 529 (servidor sobrecargado, poco comun) para no romper la
+  // conversacion por un bache pasajero.
+  let texto: string | undefined;
+  for (let intento = 0; intento < 2; intento++) {
+    try {
+      const response = await fetch(ANTHROPIC_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: cuerpoSolicitud,
+      });
+      if (response.status === 429 || response.status === 529) {
+        console.warn(`Intento ${intento + 1}: Claude no disponible (${response.status}), reintentando...`);
+        await new Promise((r) => setTimeout(r, 800));
+        continue;
+      }
+      const data = await response.json();
+      if (data?.error) {
+        console.warn("Error de la API de Claude:", data.error);
+        continue;
+      }
+      const textoCandidato = data?.content?.[0]?.text;
+      if (textoCandidato) {
+        texto = textoCandidato;
+        break;
+      }
+    } catch (err) {
+      console.warn("Fallo al llamar a la API de Claude:", err);
+    }
+  }
 
   if (!texto) {
     throw new Error("El agente no pudo generar una respuesta");
