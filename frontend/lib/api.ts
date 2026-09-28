@@ -24,12 +24,20 @@ export interface MensajeChat {
   contenido: string;
 }
 
-export interface AccionNavegacion {
+// Acción que el agente puede devolver junto con su respuesta de texto,
+// cuando reconoce que el mensaje pide interactuar con el sitio (ver una
+// carrera, ir a la galería, etc.) en vez de solo pedir información.
+export interface AccionChatAgente {
   tipo: "navegar";
-  destino: string;
+  ruta: string;
 }
 
-export async function enviarMensajeAgente(historial: MensajeChat[]) {
+export interface RespuestaAgente {
+  respuesta: string;
+  accion: AccionChatAgente | null;
+}
+
+export async function enviarMensajeAgente(historial: MensajeChat[]): Promise<RespuestaAgente> {
   const res = await fetch(`${API_URL}/api/chat/mensaje`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -37,10 +45,7 @@ export async function enviarMensajeAgente(historial: MensajeChat[]) {
   });
   if (!res.ok) throw new Error("No se pudo obtener respuesta del agente");
   const data = await res.json();
-  return {
-    respuesta: data.respuesta as string,
-    accion: (data.accion as AccionNavegacion | null) ?? null,
-  };
+  return { respuesta: data.respuesta as string, accion: data.accion ?? null };
 }
 
 export async function crearPostulante(payload: {
@@ -291,9 +296,11 @@ export async function enviarMensajeAudio(audioBlob: Blob, historial: MensajeChat
     body: formData,
   });
   if (!res.ok) throw new Error("No se pudo procesar el audio");
-  return res.json() as Promise<{
+  const data = await res.json();
+  return data as {
     textoTranscrito: string;
     respuesta: string;
+    accion: AccionChatAgente | null;
     respuestaAudioBase64: string;
-  }>;
+  };
 }

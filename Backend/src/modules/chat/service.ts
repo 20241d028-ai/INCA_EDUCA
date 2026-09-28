@@ -8,16 +8,27 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GE
 
 type CanalChat = "web" | "whatsapp";
 
-// Rutas estáticas del frontend que el chatbot puede ofrecer como destino
-// de navegación (fuera de las carreras individuales, que salen dinámicamente
-// de la DB con su propio slug).
-const RUTAS_ESTATICAS: Record<string, string> = {
-  carreras: "/carreras",
-  galeria: "/galeria",
-  contacto: "/contacto",
-  admision: "/admision",
-  nosotros: "/nosotros",
-};
+export interface AccionChatAgente {
+  tipo: "navegar";
+  ruta: string;
+}
+
+export interface RespuestaAgente {
+  respuesta: string;
+  accion: AccionChatAgente | null;
+}
+
+// Rutas fijas del sitio a las que el agente puede llevar al usuario (además
+// de "/carreras/<slug>" por cada carrera, que se arma dinámicamente). Sirven
+// también como lista blanca: una "ruta" que el modelo devuelva y no esté acá
+// (ni sea una carrera real) se descarta en vez de navegar a un lugar inventado.
+const RUTAS_FIJAS: { ruta: string; etiqueta: string }[] = [
+  { ruta: "/carreras", etiqueta: "Listado completo de todas las carreras" },
+  { ruta: "/galeria", etiqueta: "Galería de fotos" },
+  { ruta: "/admision", etiqueta: "Proceso de admisión / fechas de inicio" },
+  { ruta: "/nosotros", etiqueta: "Sobre INCA EDUCA (historia, misión)" },
+  { ruta: "/contacto", etiqueta: "Contacto" },
+];
 
 async function construirContextoInstitucional(canal: CanalChat) {
   const carreras = await listarCarreras();
@@ -25,43 +36,44 @@ async function construirContextoInstitucional(canal: CanalChat) {
     .map((c) => `- ${c.nombre} (${c.duracionMeses} meses)`)
     .join("\n");
 
+  const rutasValidas = new Set(RUTAS_FIJAS.map((r) => r.ruta));
+  let instruccionNavegacion = "";
+  if (canal === "web") {
+    for (const c of carreras) rutasValidas.add(`/carreras/${c.slug}`);
+
+    const listaRutasCarreras = carreras
+      .map((c) => `- Carrera "${c.nombre}": /carreras/${c.slug}`)
+      .join("\n");
+    const listaRutasFijas = RUTAS_FIJAS.map((r) => `- ${r.etiqueta}: ${r.ruta}`).join("\n");
+
+    instruccionNavegacion = `
+
+Páginas del sitio a las que puedes llevar al usuario cuando lo pida explícitamente (por ejemplo "muéstrame la carrera de gastronomía", "llévame a la galería", "quiero ver el proceso de admisión"):
+${listaRutasCarreras}
+${listaRutasFijas}
+
+Cuando el mensaje del usuario sea un pedido de INTERACCIÓN con la página web (ver, mostrar, ir a, abrir una carrera o sección concreta de la lista de arriba), responde en "respuesta" con una frase breve confirmando, y llena "accion" con {"tipo":"navegar","ruta":"<la ruta EXACTA de la lista de arriba>"}.
+Cuando el mensaje sea solo una pregunta que puedes responder con información (qué carreras hay, cuánto dura una carrera, costos, requisitos, etc.), responde normalmente en "respuesta" y deja "accion" en null.
+Nunca inventes una ruta que no esté en la lista de arriba, y nunca pongas una acción si el usuario no pidió explícitamente ver o ir a algo.`;
+  }
+
   const instruccionAsesor =
     canal === "whatsapp"
       ? "Si el postulante muestra interés real en una carrera y pide hablar con un asesor, pídele su nombre completo, DNI y la carrera que le interesa directamente aquí por chat, ya que estamos en WhatsApp. Una vez que tengas esos datos, indícale que un asesor se pondrá en contacto pronto."
       : "Si el postulante muestra interés real en una carrera y pide hablar con un asesor, NO le pidas su nombre, DNI o celular por chat. En vez de eso, dile brevemente que complete el formulario que aparece justo debajo del chat para conectarlo con un asesor.";
 
   const instruccionTono =
-    "\n- Usa emojis con naturalidad para dar calidez a la conversación (por ejemplo: saludos con 👋😊, temas de estudio con 📚🎓, confirmaciones con ✅👍, entusiasmo con 🙌). No tengas miedo de usarlos, pero evita ponerlos en cada palabra.";
+    canal === "whatsapp"
+      ? "\n- Usa emojis con naturalidad para dar calidez a la conversación, como lo haría cualquier persona real chateando por WhatsApp (por ejemplo: saludos con 👋😊, temas de estudio con 📚🎓, confirmaciones con ✅👍, entusiasmo con 🙌). No tengas miedo de usarlos, pero evita ponerlos en cada palabra."
+      : "";
 
+  // Misma lógica y mismo diseño en ambos canales para esta lista puntual
+  // (con el emoji 🎓 por línea, como en WhatsApp), aunque el resto del tono
+  // del canal web siga sin emojis (instruccionTono arriba).
   const instruccionListasCarreras =
     "\n- Cuando menciones la lista completa de carreras disponibles, escribe cada una en su propia línea, precedida por el emoji 🎓 (por ejemplo:\n🎓 Gastronomía Internacional\n🎓 Hostelería y Turismo\n...). No las juntes en un solo párrafo separadas por comas o punto y coma.";
 
-  // La navegación conversacional solo tiene sentido en la web (hay una
-  // página real a la que llevar al usuario). En WhatsApp no se ofrece.
-  const instruccionNavegacion =
-    canal === "web"
-      ? `
-
-Puedes ayudar al usuario a moverse por la página web cuando detectes intención real de navegar, no solo de preguntar. Estas son las rutas disponibles:
-
-Carreras (arma "destino" exactamente como "/carreras/{slug}", usando el slug exacto de la lista):
-${carreras.map((c) => `- ${c.nombre} → "/carreras/${c.slug}"`).join("\n")}
-
-Otras secciones:
-- Sección de carreras (listado completo de todas las carreras) → destino "/carreras"
-- Galería de fotos y videos → destino "/galeria"
-- Formulario de contacto → destino "/contacto"
-- Formulario de admisión/postulación → destino "/admision"
-- Sobre nosotros / historia institucional → destino "/nosotros"
-
-Diferencia clave entre preguntar e ir a un lugar:
-- "¿Qué carreras tienen?", "cuéntame de gastronomía", "cuánto dura la carrera de cosmetología" → esto es una PREGUNTA. Respondes normalmente en el campo "respuesta" y el campo "accion" queda en null.
-- "llévame a gastronomía", "quiero ir a la carrera de gastronomía", "llévame a la sección de carreras", "muéstrame la galería", "ábreme el formulario de contacto" → esto es una INTENCIÓN DE NAVEGAR. Aquí, además de responder brevemente en "respuesta" (algo como "Claro, te llevo ahí"), llenas el campo "accion" con el "destino" exacto de la lista de arriba.
-
-Solo llena "accion" cuando la intención de moverse a otra sección sea clara y explícita. Ante la duda, trata el mensaje como pregunta y deja "accion" en null.`
-      : "";
-
-  return `Eres el asistente virtual de INCA EDUCA, un CETPRO (Centro de Educación Técnico-Productiva) en Cusco, Perú, fundado en 2002.
+  const prompt = `Eres el asistente virtual de INCA EDUCA, un CETPRO (Centro de Educación Técnico-Productiva) en Cusco, Perú, fundado en 2002.
 
 Información institucional:
 - Teléfono: (084) 275994
@@ -76,9 +88,9 @@ Reglas:
 - Si te preguntan algo fuera de este contexto, indica amablemente que solo puedes ayudar con temas de INCA EDUCA.
 - ${instruccionAsesor}
 - No uses formato Markdown (nada de asteriscos, negritas ni listas con guiones). Escribe en texto plano, en párrafos cortos.${instruccionTono}${instruccionListasCarreras}
-- Sé breve, cálido y claro.${instruccionNavegacion}
+- Sé breve, cálido y claro.${instruccionNavegacion}`;
 
-Responde siempre con un JSON que tenga exactamente los campos "respuesta" (string) y "accion" (null, o un objeto con "tipo" y "destino" según corresponda).`;
+  return { prompt, rutasValidas };
 }
 
 interface MensajeChat {
@@ -86,43 +98,32 @@ interface MensajeChat {
   contenido: string;
 }
 
-export interface AccionNavegacion {
-  tipo: "navegar";
-  destino: string; // ej: "/carreras/gastronomia-internacional" o "/galeria"
-}
-
-interface RespuestaAgente {
-  respuesta: string;
-  accion: AccionNavegacion | null;
-}
-
-// Construye el schema que fuerza a Gemini a responder en JSON con la forma
-// que necesitamos, evitando tener que parsear texto libre para saber si
-// el usuario quiere navegar o solo está preguntando.
-function construirResponseSchema() {
-  return {
-    type: "object",
-    properties: {
-      respuesta: { type: "string" },
-      accion: {
-        type: "object",
-        nullable: true,
-        properties: {
-          tipo: { type: "string", enum: ["navegar"] },
-          destino: { type: "string" },
-        },
-        required: ["tipo", "destino"],
+// Esquema de salida estructurada para el canal web: el modelo clasifica cada
+// mensaje entre "solo responder" (accion: null) o "interactuar con la
+// página" (accion: navegar a una ruta real del sitio). El canal de WhatsApp
+// no tiene a dónde navegar, así que sigue devolviendo texto plano.
+const ESQUEMA_RESPUESTA_WEB = {
+  type: "OBJECT",
+  properties: {
+    respuesta: { type: "STRING" },
+    accion: {
+      type: "OBJECT",
+      nullable: true,
+      properties: {
+        tipo: { type: "STRING", enum: ["navegar"] },
+        ruta: { type: "STRING" },
       },
+      required: ["tipo", "ruta"],
     },
-    required: ["respuesta", "accion"],
-  };
-}
+  },
+  required: ["respuesta"],
+};
 
 export async function generarRespuestaAgente(
   historial: MensajeChat[],
   canal: CanalChat = "web"
 ): Promise<RespuestaAgente> {
-  const systemPrompt = await construirContextoInstitucional(canal);
+  const { prompt: systemPrompt, rutasValidas } = await construirContextoInstitucional(canal);
 
   const contents = historial.map((m) => ({
     role: m.remitente === "postulante" ? "user" : "model",
@@ -135,35 +136,46 @@ export async function generarRespuestaAgente(
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
       contents,
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: construirResponseSchema(),
-      },
+      ...(canal === "web"
+        ? {
+            generationConfig: {
+              responseMimeType: "application/json",
+              responseSchema: ESQUEMA_RESPUESTA_WEB,
+            },
+          }
+        : {}),
     }),
   });
 
   const data = await response.json();
-  const textoJson = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-  if (!textoJson) {
+  if (!texto) {
     throw new Error("El agente no pudo generar una respuesta");
   }
 
-  let parsed: RespuestaAgente;
+  if (canal !== "web") {
+    return { respuesta: texto as string, accion: null };
+  }
+
+  // El canal web pidió salida JSON estructurada. Si por algún motivo el
+  // modelo no devolviera JSON válido (o lo envolviera en un bloque de código
+  // ```json), se trata como texto plano en vez de romper la conversación.
   try {
-    parsed = JSON.parse(textoJson);
+    const textoLimpio = texto.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/, "").trim();
+    const parsed = JSON.parse(textoLimpio);
+    const respuesta = typeof parsed?.respuesta === "string" ? parsed.respuesta : texto;
+    const rutaPropuesta = parsed?.accion?.ruta;
+    const accion: AccionChatAgente | null =
+      parsed?.accion?.tipo === "navegar" &&
+      typeof rutaPropuesta === "string" &&
+      rutasValidas.has(rutaPropuesta)
+        ? { tipo: "navegar", ruta: rutaPropuesta }
+        : null;
+    return { respuesta, accion };
   } catch {
-    // Red de seguridad: si por algún motivo Gemini no devuelve JSON válido,
-    // no rompemos el chat — mostramos el texto crudo y sin navegación.
-    return { respuesta: textoJson, accion: null };
+    return { respuesta: texto as string, accion: null };
   }
-
-  // El canal WhatsApp nunca debe disparar navegación.
-  if (canal === "whatsapp") {
-    return { respuesta: parsed.respuesta, accion: null };
-  }
-
-  return parsed;
 }
 
 export async function escalarConversacion(postulanteId: string, historial: MensajeChat[]) {
