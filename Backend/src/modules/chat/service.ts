@@ -8,11 +8,53 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GE
 
 type CanalChat = "web" | "whatsapp";
 
+export interface AccionChatAgente {
+  tipo: "navegar";
+  ruta: string;
+}
+
+export interface RespuestaAgente {
+  respuesta: string;
+  accion: AccionChatAgente | null;
+}
+
+// Rutas fijas del sitio a las que el agente puede llevar al usuario (además
+// de "/carreras/<slug>" por cada carrera, que se arma dinámicamente). Sirven
+// también como lista blanca: una "ruta" que el modelo devuelva y no esté acá
+// (ni sea una carrera real) se descarta en vez de navegar a un lugar inventado.
+const RUTAS_FIJAS: { ruta: string; etiqueta: string }[] = [
+  { ruta: "/galeria", etiqueta: "Galería de fotos" },
+  { ruta: "/admision", etiqueta: "Proceso de admisión / fechas de inicio" },
+  { ruta: "/nosotros", etiqueta: "Sobre INCA EDUCA (historia, misión)" },
+  { ruta: "/contacto", etiqueta: "Contacto" },
+];
+
 async function construirContextoInstitucional(canal: CanalChat) {
   const carreras = await listarCarreras();
   const listaCarreras = carreras
     .map((c) => `- ${c.nombre} (${c.duracionMeses} meses)`)
     .join("\n");
+
+  const rutasValidas = new Set(RUTAS_FIJAS.map((r) => r.ruta));
+  let instruccionNavegacion = "";
+  if (canal === "web") {
+    for (const c of carreras) rutasValidas.add(`/carreras/${c.slug}`);
+
+    const listaRutasCarreras = carreras
+      .map((c) => `- Carrera "${c.nombre}": /carreras/${c.slug}`)
+      .join("\n");
+    const listaRutasFijas = RUTAS_FIJAS.map((r) => `- ${r.etiqueta}: ${r.ruta}`).join("\n");
+
+    instruccionNavegacion = `
+
+Páginas del sitio a las que puedes llevar al usuario cuando lo pida explícitamente (por ejemplo "muéstrame la carrera de gastronomía", "llévame a la galería", "quiero ver el proceso de admisión"):
+${listaRutasCarreras}
+${listaRutasFijas}
+
+Cuando el mensaje del usuario sea un pedido de INTERACCIÓN con la página web (ver, mostrar, ir a, abrir una carrera o sección concreta de la lista de arriba), responde en "respuesta" con una frase breve confirmando, y llena "accion" con {"tipo":"navegar","ruta":"<la ruta EXACTA de la lista de arriba>"}.
+Cuando el mensaje sea solo una pregunta que puedes responder con información (qué carreras hay, cuánto dura una carrera, costos, requisitos, etc.), responde normalmente en "respuesta" y deja "accion" en null.
+Nunca inventes una ruta que no esté en la lista de arriba, y nunca pongas una acción si el usuario no pidió explícitamente ver o ir a algo.`;
+  }
 
   const instruccionAsesor =
     canal === "whatsapp"
@@ -24,12 +66,13 @@ async function construirContextoInstitucional(canal: CanalChat) {
       ? "\n- Usa emojis con naturalidad para dar calidez a la conversación, como lo haría cualquier persona real chateando por WhatsApp (por ejemplo: saludos con 👋😊, temas de estudio con 📚🎓, confirmaciones con ✅👍, entusiasmo con 🙌). No tengas miedo de usarlos, pero evita ponerlos en cada palabra."
       : "";
 
+  // Misma lógica y mismo diseño en ambos canales para esta lista puntual
+  // (con el emoji 🎓 por línea, como en WhatsApp), aunque el resto del tono
+  // del canal web siga sin emojis (instruccionTono arriba).
   const instruccionListasCarreras =
-    canal === "whatsapp"
-      ? "\n- Cuando menciones la lista completa de carreras disponibles, escribe cada una en su propia línea, precedida por el emoji 🎓 (por ejemplo:\n🎓 Gastronomía Internacional\n🎓 Hostelería y Turismo\n...). No las juntes en un solo párrafo separadas por comas o punto y coma."
-      : "";
+    "\n- Cuando menciones la lista completa de carreras disponibles, escribe cada una en su propia línea, precedida por el emoji 🎓 (por ejemplo:\n🎓 Gastronomía Internacional\n🎓 Hostelería y Turismo\n...). No las juntes en un solo párrafo separadas por comas o punto y coma.";
 
-  return `Eres el asistente virtual de INCA EDUCA, un CETPRO (Centro de Educación Técnico-Productiva) en Cusco, Perú, fundado en 2002.
+  const prompt = `Eres el asistente virtual de INCA EDUCA, un CETPRO (Centro de Educación Técnico-Productiva) en Cusco, Perú, fundado en 2002.
 
 Información institucional:
 - Teléfono: (084) 275994
@@ -44,7 +87,9 @@ Reglas:
 - Si te preguntan algo fuera de este contexto, indica amablemente que solo puedes ayudar con temas de INCA EDUCA.
 - ${instruccionAsesor}
 - No uses formato Markdown (nada de asteriscos, negritas ni listas con guiones). Escribe en texto plano, en párrafos cortos.${instruccionTono}${instruccionListasCarreras}
-- Sé breve, cálido y claro.`;
+- Sé breve, cálido y claro.${instruccionNavegacion}`;
+
+  return { prompt, rutasValidas };
 }
 
 interface MensajeChat {
@@ -52,8 +97,32 @@ interface MensajeChat {
   contenido: string;
 }
 
-export async function generarRespuestaAgente(historial: MensajeChat[], canal: CanalChat = "web") {
-  const systemPrompt = await construirContextoInstitucional(canal);
+// Esquema de salida estructurada para el canal web: el modelo clasifica cada
+// mensaje entre "solo responder" (accion: null) o "interactuar con la
+// página" (accion: navegar a una ruta real del sitio). El canal de WhatsApp
+// no tiene a dónde navegar, así que sigue devolviendo texto plano.
+const ESQUEMA_RESPUESTA_WEB = {
+  type: "OBJECT",
+  properties: {
+    respuesta: { type: "STRING" },
+    accion: {
+      type: "OBJECT",
+      nullable: true,
+      properties: {
+        tipo: { type: "STRING", enum: ["navegar"] },
+        ruta: { type: "STRING" },
+      },
+      required: ["tipo", "ruta"],
+    },
+  },
+  required: ["respuesta"],
+};
+
+export async function generarRespuestaAgente(
+  historial: MensajeChat[],
+  canal: CanalChat = "web"
+): Promise<RespuestaAgente> {
+  const { prompt: systemPrompt, rutasValidas } = await construirContextoInstitucional(canal);
 
   const contents = historial.map((m) => ({
     role: m.remitente === "postulante" ? "user" : "model",
@@ -66,6 +135,14 @@ export async function generarRespuestaAgente(historial: MensajeChat[], canal: Ca
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
       contents,
+      ...(canal === "web"
+        ? {
+            generationConfig: {
+              responseMimeType: "application/json",
+              responseSchema: ESQUEMA_RESPUESTA_WEB,
+            },
+          }
+        : {}),
     }),
   });
 
@@ -76,7 +153,28 @@ export async function generarRespuestaAgente(historial: MensajeChat[], canal: Ca
     throw new Error("El agente no pudo generar una respuesta");
   }
 
-  return texto as string;
+  if (canal !== "web") {
+    return { respuesta: texto as string, accion: null };
+  }
+
+  // El canal web pidió salida JSON estructurada. Si por algún motivo el
+  // modelo no devolviera JSON válido (o lo envolviera en un bloque de código
+  // ```json), se trata como texto plano en vez de romper la conversación.
+  try {
+    const textoLimpio = texto.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/, "").trim();
+    const parsed = JSON.parse(textoLimpio);
+    const respuesta = typeof parsed?.respuesta === "string" ? parsed.respuesta : texto;
+    const rutaPropuesta = parsed?.accion?.ruta;
+    const accion: AccionChatAgente | null =
+      parsed?.accion?.tipo === "navegar" &&
+      typeof rutaPropuesta === "string" &&
+      rutasValidas.has(rutaPropuesta)
+        ? { tipo: "navegar", ruta: rutaPropuesta }
+        : null;
+    return { respuesta, accion };
+  } catch {
+    return { respuesta: texto as string, accion: null };
+  }
 }
 
 export async function escalarConversacion(postulanteId: string, historial: MensajeChat[]) {

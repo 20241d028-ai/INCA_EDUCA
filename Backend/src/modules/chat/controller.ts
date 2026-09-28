@@ -18,8 +18,8 @@ export async function postMensaje(req: Request, res: Response) {
   }
 
   try {
-    const respuesta = await generarRespuestaAgente(historial);
-    res.json({ respuesta });
+    const { respuesta, accion } = await generarRespuestaAgente(historial);
+    res.json({ respuesta, accion });
   } catch (error) {
     console.error("Error del agente conversacional:", error);
     res.status(502).json({ error: "El agente conversacional no está disponible en este momento" });
@@ -52,7 +52,7 @@ export async function postMensajeAudio(req: Request, res: Response) {
     const { texto } = await sttResponse.json();
 
     const nuevoHistorial = [...historial, { remitente: "postulante", contenido: texto }];
-    const respuesta = await generarRespuestaAgente(nuevoHistorial);
+    const { respuesta, accion } = await generarRespuestaAgente(nuevoHistorial);
 
     const ttsResponse = await fetch(`${process.env.STT_SERVICE_URL}/generar-audio`, {
       method: "POST",
@@ -63,7 +63,7 @@ export async function postMensajeAudio(req: Request, res: Response) {
     const audioArrayBuffer = await ttsResponse.arrayBuffer();
     const respuestaAudioBase64 = Buffer.from(audioArrayBuffer).toString("base64");
 
-    res.json({ textoTranscrito: texto, respuesta, respuestaAudioBase64 });
+    res.json({ textoTranscrito: texto, respuesta, accion, respuestaAudioBase64 });
   } catch (error) {
     console.error("Error en mensaje de audio:", error);
     res.status(502).json({ error: "No se pudo procesar el audio en este momento" });
